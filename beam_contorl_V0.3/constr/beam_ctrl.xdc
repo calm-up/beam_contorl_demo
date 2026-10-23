@@ -10,9 +10,8 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property PACKAGE_PIN V20 [get_ports {sys_clk_i}]
 set_property IOSTANDARD LVCMOS33 [get_ports {sys_clk_i}]
 create_clock -name sys_clk -period 20.000 -waveform {0.000 10.000} [get_ports {sys_clk_i}]
-# Temporary board-validation route: V20 is the N side and has no direct
-# single-ended clock path. Only IBUF-to-BUFG is allowed to use fabric routing.
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets sys_clk_i_IBUF]
+# V20 temporary clock route override is applied only during implementation
+# by clock_route_impl.xdc, when the IBUF net exists.
 
 
 # RX line 1: J1
@@ -426,5 +425,18 @@ set_property PACKAGE_PIN K6 [get_ports {spare_rs485_dir_o}]
 set_property IOSTANDARD LVCMOS33 [get_ports {spare_rs485_dir_o}]
 
 # JTAG uses dedicated configuration pins and therefore has no RTL/XDC remap.
+# U22 independent data Flash (SPI1); U5 configuration Flash is separate.
+set_property PACKAGE_PIN AA15 [get_ports {u22_cs_n_o}]
+set_property IOSTANDARD LVCMOS33 [get_ports {u22_cs_n_o}]
+set_property PACKAGE_PIN AA13 [get_ports {u22_sck_o}]
+set_property IOSTANDARD LVCMOS33 [get_ports {u22_sck_o}]
+set_property PACKAGE_PIN V13 [get_ports {u22_mosi_o}]
+set_property IOSTANDARD LVCMOS33 [get_ports {u22_mosi_o}]
+set_property PACKAGE_PIN Y14 [get_ports {u22_miso_i}]
+set_property IOSTANDARD LVCMOS33 [get_ports {u22_miso_i}]
+set_property PACKAGE_PIN Y13 [get_ports {u22_wp_n_o}]
+set_property IOSTANDARD LVCMOS33 [get_ports {u22_wp_n_o}]
+set_property PACKAGE_PIN AA14 [get_ports {u22_hold_n_o}]
+set_property IOSTANDARD LVCMOS33 [get_ports {u22_hold_n_o}]
 # No external user reset pin was found; reset policy is implemented in RTL later.
 # U4.U22/rx_sdi_o[17] is also PUDC_B. Resolve its pre-configuration bias before board use.

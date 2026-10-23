@@ -25,6 +25,12 @@ module beam_ctrl_top #(
     input  wire        spare_rs485_rx_i,
     output wire        spare_rs485_tx_o,
     output wire        spare_rs485_dir_o,
+    output wire        u22_cs_n_o,
+    output wire        u22_sck_o,
+    output wire        u22_mosi_o,
+    input  wire        u22_miso_i,
+    output wire        u22_wp_n_o,
+    output wire        u22_hold_n_o,
     output wire [31:0] rx_sdi_o,
     output wire [7:0]  rx_clk_o,
     output wire [7:0]  rx_csb_o,
@@ -55,6 +61,74 @@ module beam_ctrl_top #(
     assign debug_rs485_dir_o = 1'b0;
     assign spare_rs485_tx_o = 1'b0;
     assign spare_rs485_dir_o = 1'b0;
+
+    // U22 is independent of the U5 configuration Flash. Writes require the
+    // exact expected JEDEC ID and are confined to the selected U22 half.
+    wire flash_spi_busy, flash_spi_done, flash_spi_start;
+    wire [5:0] flash_tx_count, flash_rx_count;
+    wire [255:0] flash_tx_data, flash_rx_data;
+    wire [23:0] flash_jedec_id;
+    wire flash_probe_done, flash_probe_valid;
+    wire probe_spi_start, device_spi_start;
+    wire [5:0] probe_tx_count, probe_rx_count, device_tx_count, device_rx_count;
+    wire [255:0] probe_tx_data, device_tx_data;
+    wire flash_start, flash_array, flash_busy, flash_done, flash_error;
+    wire [7:0] flash_command;
+    wire [95:0] flash_payload;
+    wire device_request, device_busy, device_done, device_error;
+    wire [1:0] device_operation;
+    wire [23:0] device_address;
+    wire [4:0] device_length;
+    wire [127:0] device_write_data, device_read_data;
+    wire [10:0] flash_loaded_count;
+    wire [23:0] flash_cache_sample;
+    assign flash_spi_start = flash_probe_done ? device_spi_start : probe_spi_start;
+    assign flash_tx_count = flash_probe_done ? device_tx_count : probe_tx_count;
+    assign flash_rx_count = flash_probe_done ? device_rx_count : probe_rx_count;
+    assign flash_tx_data = flash_probe_done ? device_tx_data : probe_tx_data;
+    assign u22_wp_n_o = 1'b1;
+    assign u22_hold_n_o = 1'b1;
+    u22_flash_probe u_flash_probe (
+        .clk_i(sys_clk_i), .rst_i(rst), .spi_busy_i(flash_spi_busy),
+        .spi_done_i(flash_spi_done), .spi_rx_i(flash_rx_data),
+        .spi_start_o(probe_spi_start), .spi_tx_count_o(probe_tx_count),
+        .spi_rx_count_o(probe_rx_count), .spi_tx_o(probe_tx_data),
+        .jedec_id_o(flash_jedec_id), .probe_done_o(flash_probe_done),
+        .probe_valid_o(flash_probe_valid)
+    );
+    u22_flash_device u_flash_device (
+        .clk_i(sys_clk_i), .rst_i(rst), .probe_done_i(flash_probe_done),
+        .jedec_id_i(flash_jedec_id), .request_i(device_request),
+        .operation_i(device_operation), .address_i(device_address),
+        .length_i(device_length), .write_data_i(device_write_data),
+        .spi_busy_i(flash_spi_busy), .spi_done_i(flash_spi_done),
+        .spi_rx_i(flash_rx_data), .spi_start_o(device_spi_start),
+        .spi_tx_count_o(device_tx_count), .spi_rx_count_o(device_rx_count),
+        .spi_tx_data_o(device_tx_data), .busy_o(device_busy),
+        .done_o(device_done), .error_o(device_error),
+        .read_data_o(device_read_data)
+    );
+    u22_flash_record_service u_flash_records (
+        .clk_i(sys_clk_i), .rst_i(rst), .start_i(flash_start),
+        .command_i(flash_command), .array_i(flash_array),
+        .payload_i(flash_payload), .device_busy_i(device_busy),
+        .device_done_i(device_done), .device_error_i(device_error),
+        .device_read_data_i(device_read_data),
+        .device_request_o(device_request), .device_operation_o(device_operation),
+        .device_address_o(device_address), .device_length_o(device_length),
+        .device_write_data_o(device_write_data), .busy_o(flash_busy),
+        .done_o(flash_done), .error_o(flash_error),
+        .loaded_count_o(flash_loaded_count),
+        .cache_sample_o(flash_cache_sample)
+    );
+    u22_spi_master u_flash_spi (
+        .clk_i(sys_clk_i), .rst_i(rst), .start_i(flash_spi_start),
+        .tx_count_i(flash_tx_count), .rx_count_i(flash_rx_count),
+        .tx_data_i(flash_tx_data), .miso_i(u22_miso_i),
+        .cs_n_o(u22_cs_n_o), .sck_o(u22_sck_o),
+        .mosi_o(u22_mosi_o), .busy_o(flash_spi_busy),
+        .done_o(flash_spi_done), .rx_data_o(flash_rx_data)
+    );
 
     wire rx_byte_valid, rx_byte_error;
     wire [7:0] rx_byte;
@@ -137,6 +211,16 @@ module beam_ctrl_top #(
         .serial_o(rs422_tx_o)
     );
     wire [7:0] rx_gate, tx_gate;
+    wire [7:0] rx_pulse_mode, tx_pulse_mode;
+    wire pulse_tx_active, pulse_rx_active;
+    pulse_gate_110 u_rx_pulse_gate (
+        .clk_i(sys_clk_i), .rst_i(rst), .mode_i(rx_pulse_mode),
+        .tx_active_o(), .rx_active_o(pulse_rx_active)
+    );
+    pulse_gate_110 u_tx_pulse_gate (
+        .clk_i(sys_clk_i), .rst_i(rst), .mode_i(tx_pulse_mode),
+        .tx_active_o(pulse_tx_active), .rx_active_o()
+    );
     wire dispatcher_busy;
     wire [3:0] dispatcher_state;
     protocol_v03_dispatcher u_dispatcher (
@@ -149,6 +233,12 @@ module beam_ctrl_top #(
         .rx_enable_i(channel_rx_enable), .tx_enable_i(channel_tx_enable),
         .reset_busy_i(target_reset_busy), .reset_done_i(target_reset_done),
         .response_ready_i(response_ready), .response_done_i(response_done),
+        .flash_probe_done_i(flash_probe_done),
+        .flash_probe_valid_i(flash_probe_valid),
+        .flash_busy_i(flash_busy), .flash_done_i(flash_done),
+        .flash_error_i(flash_error),
+        .flash_loaded_count_i(flash_loaded_count),
+        .flash_cache_sample_i(flash_cache_sample),
         .channel_start_o(channel_start), .channel_array_o(channel_array),
         .channel_line_o(channel_line), .channel_chip_o(channel_chip),
         .channel_index_o(channel_index), .channel_enable_o(channel_enable),
@@ -157,6 +247,10 @@ module beam_ctrl_top #(
         .clear_lines_o(clear_lines), .reset_start_o(reset_start),
         .reset_array_o(reset_array), .reset_lines_o(reset_lines),
         .rx_gate_o(rx_gate), .tx_gate_o(tx_gate),
+        .rx_pulse_mode_o(rx_pulse_mode),
+        .tx_pulse_mode_o(tx_pulse_mode),
+        .flash_start_o(flash_start), .flash_command_o(flash_command),
+        .flash_array_o(flash_array), .flash_payload_o(flash_payload),
         .response_start_o(response_start), .response_array_o(response_array),
         .response_command_o(response_command), .response_status_o(response_status),
         .response_extra_valid_o(response_extra_valid),
@@ -201,13 +295,13 @@ module beam_ctrl_top #(
         assign rx_rstn_o[line] = por_done_q ? (reset_rx ? target_reset_rstn[line] : core_rx_rstn[line]) : 1'b0;
         assign rx_t_o[line] = 1'b0;
         assign rx_r_o[line] = por_done_q && core_init && !reset_rx &&
-                              rx_gate[line] && channel_rx_enable[line];
+                              rx_gate[line] && channel_rx_enable[line] && pulse_rx_active;
         assign tx_clk_o[line] = por_done_q && (reset_tx ? target_reset_clk[line] : core_tx_clk[line]);
         assign tx_csb_o[line] = !por_done_q || reset_tx ? 1'b1 : core_tx_csb[line];
         assign tx_ldb_o[line] = !por_done_q || reset_tx ? 1'b1 : core_tx_ldb[line];
         assign tx_rstn_o[line] = por_done_q ? (reset_tx ? target_reset_rstn[line] : core_tx_rstn[line]) : 1'b0;
         assign tx_t_o[line] = por_done_q && core_init && !reset_tx &&
-                              tx_gate[line] && channel_tx_enable[line];
+                              tx_gate[line] && channel_tx_enable[line] && pulse_tx_active;
         assign tx_r_o[line] = 1'b0;
         for (chip=0;chip<4;chip=chip+1) begin : g_chip
             assign rx_sdi_o[line*4+chip] = por_done_q && !reset_rx ? core_rx_sdi[line*4+chip] : 1'b0;

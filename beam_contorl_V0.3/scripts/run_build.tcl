@@ -1,6 +1,7 @@
 set root [file normalize [file join [file dirname [info script]] ..]]
 set debug_enabled [expr {[info exists ::env(V03_ENABLE_ILA)] && $::env(V03_ENABLE_ILA) eq "1"}]
-set flavor [expr {$debug_enabled ? "debug" : "base"}]
+set flavor [expr {[info exists ::env(V03_BUILD_FLAVOR)] ?
+    $::env(V03_BUILD_FLAVOR) : ($debug_enabled ? "debug" : "base")}]
 set project [file join $root build $flavor beam_control_v03.xpr]
 if {![file exists $project]} { error "Create project first: $project" }
 set out_dir [file join $root output $flavor]
