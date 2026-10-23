@@ -1,0 +1,10 @@
+/build/
+/output/
+/reports/
+/xsim.dir/
+/.Xil/
+/*.jou
+/*.log
+/*.pb
+/*.wdb
+/*.wcfg
