@@ -1,0 +1,6 @@
+TRIG_RESULT cases=18001 errors=0
+BJN110_RESULT offset=0 cases=184 samples=5888 data_errors=0 tag_errors=0 trig_errors=0
+BJN110_NUMERIC_PASS
+TRIG_RESULT cases=18001 errors=0
+BJN110_RESULT offset=10 cases=184 samples=5888 data_errors=0 tag_errors=0 trig_errors=0
+BJN110_NUMERIC_PASS
