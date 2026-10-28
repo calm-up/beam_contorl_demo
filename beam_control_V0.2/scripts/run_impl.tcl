@@ -51,6 +51,8 @@ if {$route_result != 0} {
     exit 3
 }
 
+set_property CONFIG_MODE SPIx1 [current_design]
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
 write_checkpoint -force [file join $report_dir post_route.dcp]
 report_timing_summary -delay_type min_max -report_unconstrained \
     -check_timing_verbose -file [file join $report_dir post_route_timing_summary.rpt]
