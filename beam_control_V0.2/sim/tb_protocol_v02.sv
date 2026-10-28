@@ -38,7 +38,7 @@ module tb_protocol_v02;
 
     always @(posedge sys_clk_i) begin
         #1;
-        if (!previous_rx_clk && rx_clk_o[0] && !rx_csb_o[0]) begin
+        if (dut.core_init_done && !previous_rx_clk && rx_clk_o[0] && !rx_csb_o[0]) begin
             for (chip = 0; chip < 4; chip = chip + 1)
                 captured[frame_count][chip] =
                     {captured[frame_count][chip][22:0], rx_sdi_o[chip]};
@@ -48,10 +48,10 @@ module tb_protocol_v02;
                 frame_count = frame_count + 1;
             end
         end
-        if (!rx_ldb_o[0]) ldb_count = ldb_count + 1;
+        if (dut.core_init_done && !rx_ldb_o[0]) ldb_count = ldb_count + 1;
         previous_rx_clk = rx_clk_o[0];
 
-        if (!previous_tx_clk && tx_clk_o[1] && !tx_csb_o[1]) begin
+        if (dut.core_init_done && !previous_tx_clk && tx_clk_o[1] && !tx_csb_o[1]) begin
             for (chip = 0; chip < 4; chip = chip + 1)
                 captured_tx[tx_frame_count][chip] =
                     {captured_tx[tx_frame_count][chip][22:0], tx_sdi_o[4+chip]};

@@ -270,6 +270,8 @@ module beam_ctrl_top #(
     assign spare_rs485_dir_o = 1'b0;
 
     beam_ctrl_core #(
+        .ENABLE_CHIP_INIT(1'b1),
+        .CID_MAP(CHIP_CID_MAP),
         .SERIAL_HALF_PERIOD_CYCLES(SERIAL_HALF_PERIOD_CYCLES),
         .POST_FRAME_CLOCKS(POST_FRAME_CLOCKS),
         .RESET_CLK_CYCLES(RESET_CLK_CYCLES),
