@@ -2,7 +2,7 @@
   "date": "2026-11-04",
   "root": "D:\\beam_control\\beam_control_demo\\beam_contorl_demo\\beam_contorl_V0.3",
   "scope": "V0.3/build only; s53 kept; S54 untouched",
-  "state": "archived_pending_git_and_cleanup",
+  "state": "archived_and_pushed_cleanup_blocked_by_policy",
   "versions": [
     {
       "version": "base",
@@ -15835,5 +15835,13 @@
   "archive_verification": {
     "entries_verified": 349,
     "result": "all SHA256 match"
+  },
+  "source_archive_commit": "56266ac",
+  "cleanup_result": {
+    "removed_directories": 0,
+    "freed_bytes": 0,
+    "reason": "Automatic approval rejected recursive directory deletion: blocked by policy; no more specific reason provided.",
+    "manual_instructions": "README.md",
+    "all_original_build_directories_present": true
   }
 }

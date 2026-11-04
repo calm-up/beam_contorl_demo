@@ -35,4 +35,34 @@
 
 profiles 中的 XPR 是配置证据，仍可能含已清理目录路径。新建工程使用 scripts/create_project.tcl；复核历史参数、ILA 配置时先查看对应 profiles，不能直接用当前默认参数冒充原版本。
 
-清理状态、校验结果和释放空间在完成后补记于本文件及 manifest。
+## 本次结果与待清理清单
+
+归档核验：349 项配置、报告和保留产物逐项 SHA256 一致。源码与归档记录已提交并推送至 origin/main，首个提交为 `56266ac`。本次没有改动 RTL，也没有重新综合、仿真或下载硬件。
+
+删除状态：自动审批拒绝旧 build 目录的递归删除操作，返回“blocked by policy”，未提供更具体原因。因此 19 个原目录仍在，尚未释放空间。此次归档在 output 中新增约 463 MiB 的独有检查点、IP 配置和历史波形；这是先保全证据的副本，完成旧目录删除后预计净节省约 1.6 GiB（含 Git 文本证据前后的空间差异）。
+
+手动清理：确认 Vivado 没有打开本工程后，在资源管理器进入本工程 `build`，保留 `s53`，删除以下已归档目录。当前同级 S54 不在该路径内。
+
+```text
+base
+beam110_pipelined
+beam110_review
+bjn110_math
+c30
+codebook_20261030
+debug_link_20261029
+diag_sdo_fix
+diag_sdo_raw
+diag_short
+gui_sim_check
+l50
+ldb100ns_check
+manual_compare
+release_20261029
+review
+s50
+s51
+s52
+```
+
+不要删除 output/build_history_artifacts_20261104：其中有上述旧目录独有的最终检查点、IP XCI 和波形。原有 output 中的 BIT/LTX、CSV 及报告也应保留。Git 上传的是源码与配置/报告证据，大型二进制产物仍只在本地。
