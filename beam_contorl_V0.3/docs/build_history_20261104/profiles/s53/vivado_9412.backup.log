@@ -1,0 +1,254 @@
+#-----------------------------------------------------------
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Mon Nov  2 14:38:51 2026
+# Process ID         : 9412
+# Current directory  : D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent4608 D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\build\s53\beam_control_v03.xpr
+# Log file           : D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/vivado.log
+# Journal file       : D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53\vivado.jou
+# Running On         : LAPTOP-MU049O3G
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 22621
+# Processor Detail   : Intel(R) Core(TM) i9-14900HX
+# CPU Frequency      : 2419 MHz
+# CPU Physical cores : 24
+# CPU Logical cores  : 32
+# Host memory        : 16890 MB
+# Swap memory        : 16106 MB
+# Total Virtual      : 32996 MB
+# Available Virtual  : 16595 MB
+#-----------------------------------------------------------
+start_gui
+open_project D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/beam_control_v03.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Vivado/Vivado/Vivado/2024.2/data/ip'.
+open_project: Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 1295.988 ; gain = 195.613
+update_compile_order -fileset sources_1
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_top.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_response.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_core.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_rs485_port.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_response.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_response.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_top.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_response.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_core.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_rs485_port.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_rs485_port.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_rs485_port.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_top.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_response.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_core.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_rs485_port.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_top.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_top.sv:]
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-12493] Simulation top is 'beam_ctrl_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/beam_control_v03.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'D:/Vivado/Vivado/Vivado/2024.2/tps/boost_1_72_0'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'D:/Vivado/Vivado/Vivado/2024.2/data/xsim/xsim.ini' copied to run dir:'D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/beam_control_v03.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-54] Inspecting design source files for 'beam_ctrl_top' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/beam_control_v03.sim/sim_1/behav/xsim/tri.mem'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/beam_control_v03.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -L uvm -prj beam_ctrl_top_vlog.prj"
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/beam_control_v03.gen/sources_1/ip/ila_v03_array/sim/ila_v03_array.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module ila_v03_array
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/beam_control_v03.gen/sources_1/ip/ila_v03_protocol/sim/ila_v03_protocol.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module ila_v03_protocol
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/tri_fun.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tri_fun
+WARNING: [VRFC 10-2096] empty statement in sequential block [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/tri_fun.v:134]
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_cmd_pkg.sv" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_load_ctrl.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module array_load_ctrl
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_output_router.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module array_output_router
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_reset_ctrl.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module array_reset_ctrl
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_target_reset.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module array_target_reset
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_write_engine.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module array_write_engine
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_ctrl_core.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module beam_ctrl_core
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_formula_calc.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module beam_formula_calc
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_phase_calc.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module beam_phase_calc
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_phase_rom.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tri_ram
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/channel_executor.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module channel_executor
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/chip_diag_op.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module chip_diag_op
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/chip_sdo_reader.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module chip_sdo_reader
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/protocol_v03_dispatcher.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module protocol_v03_dispatcher
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/protocol_v03_parser.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module protocol_v03_parser
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/protocol_v03_response.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module protocol_v03_response
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/protocol_v03_rs485_port.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module protocol_v03_rs485_port
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/pulse_gate_110.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module pulse_gate_110
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_device.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module u22_flash_device
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_probe.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module u22_flash_probe
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_record_service.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module u22_flash_record_service
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_spi_master.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module u22_spi_master
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/uart_rx.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module uart_rx
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/uart_tx_byte.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module uart_tx_byte
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_ctrl_top.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module beam_ctrl_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/beam_control_v03.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+INFO: [USF-XSim-69] 'compile' step finished in '3' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/beam_control_v03.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot beam_ctrl_top_behav xil_defaultlib.beam_ctrl_top xil_defaultlib.glbl -log elaborate.log"
+Vivado Simulator v2024.2.0
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/Vivado/Vivado/Vivado/2024.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot beam_ctrl_top_behav xil_defaultlib.beam_ctrl_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package xil_defaultlib.beam_cmd_pkg
+Compiling module xil_defaultlib.u22_flash_probe
+Compiling module xil_defaultlib.u22_flash_device
+Compiling module xil_defaultlib.u22_flash_record_service
+Compiling module xil_defaultlib.u22_spi_master_default
+Compiling module xil_defaultlib.uart_rx(CLK_HZ=32'b0101111101011...
+Compiling module xil_defaultlib.protocol_v03_parser_default
+Compiling module xil_defaultlib.tri_ram
+Compiling module xil_defaultlib.tri_fun
+Compiling module xil_defaultlib.beam_formula_calc(X_DIS=96,Y_DIS...
+Compiling module xil_defaultlib.beam_phase_calc
+Compiling module xil_defaultlib.channel_executor
+Compiling module xil_defaultlib.chip_sdo_reader(TIMEOUT_CYCLES=3...
+Compiling module xil_defaultlib.chip_diag_op
+Compiling module xil_defaultlib.array_target_reset(HALF_PERIOD_C...
+Compiling module xil_defaultlib.uart_tx_byte(CLK_HZ=32'b01011111...
+Compiling module xil_defaultlib.protocol_v03_response(CLK_HZ=32'...
+Compiling module xil_defaultlib.protocol_v03_rs485_port(CLK_HZ=3...
+Compiling module xil_defaultlib.pulse_gate_110
+Compiling module xil_defaultlib.protocol_v03_dispatcher
+Compiling module xil_defaultlib.array_reset_ctrl(SERIAL_HALF_PER...
+Compiling module xil_defaultlib.array_write_engine(SERIAL_HALF_P...
+Compiling module xil_defaultlib.array_load_ctrl(CSB_TO_LDB_CYCLE...
+Compiling module xil_defaultlib.array_output_router
+Compiling module xil_defaultlib.beam_ctrl_core(ENABLE_CHIP_INIT=...
+Compiling module xil_defaultlib.beam_ctrl_top
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot beam_ctrl_top_behav
+run_program: Time (s): cpu = 00:00:00 ; elapsed = 00:00:12 . Memory (MB): peak = 1348.164 ; gain = 0.000
+INFO: [USF-XSim-69] 'elaborate' step finished in '12' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/s53/beam_control_v03.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "beam_ctrl_top_behav -key {Behavioral:sim_1:Functional:beam_ctrl_top} -tclbatch {beam_ctrl_top.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Time resolution is 1 ps
+source beam_ctrl_top.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+WARNING: File rtl/rom/tri.mem referenced on D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_load_ctrl.sv at line 54 cannot be opened for reading. Please ensure that this file is available in the current working directory or parent directory of xsim.dir location specified via -xsimdir switch.
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'beam_ctrl_top_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:03 ; elapsed = 00:00:21 . Memory (MB): peak = 1400.672 ; gain = 55.352
+source D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/scripts/setup_gui_simulation.tcl
+# set sim_root [file normalize [file join [file dirname [info script]] ..]]
+# if {[current_project -quiet] eq ""} {error "Open the S53 XPR first"}
+# set sim_cases {
+#     sim_sdo_pipeline tb_chip_sdo_pipeline
+#     sim_sdo_alignment tb_array_write_sdo
+#     sim_spi_timing tb_tr_spi_timing
+#     sim_write_load tb_tr_pipeline_model
+#     sim_initialization tb_ccar10405l_init
+#     sim_protocol tb_protocol_v03_top
+#     sim_formula tb_beam_formula_calc
+#     sim_pulse tb_pulse_gate_110
+#     sim_flash tb_u22_flash_device
+# }
+# foreach {sim_set sim_top} $sim_cases {
+#     if {![llength [get_filesets -quiet $sim_set]]} {create_fileset -simset $sim_set}
+#     set fs [get_filesets $sim_set]
+#     add_files -fileset $sim_set -norecurse [file join $sim_root sim ${sim_top}.sv]
+#     set_property SOURCE_SET sources_1 $fs
+#     set_property TOP $sim_top $fs
+#     set_property TOP_AUTO_SET 0 $fs
+#     set_property xsim.simulate.runtime all $fs
+#     set_property xsim.elaborate.debug_level all $fs
+#     set_property xsim.simulate.log_all_signals true $fs
+#     set_property xsim.simulate.tcl.pre [file join $sim_root scripts gui_sim_prepare.tcl] $fs
+#     update_compile_order -fileset $sim_set
+# }
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_top.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_response.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_core.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_rs485_port.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_response.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_response.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_top.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_response.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_core.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_rs485_port.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_top.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_top.sv:]
+ERROR: [Common 17-180] Spawn failed: No error
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_top.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_response.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\beam_ctrl_core.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_rs485_port.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_rs485_port.sv:]
+WARNING: [filemgmt 56-199] Attempt to get parsing info during refresh. "On-the-fly" syntax checking information may be incorrect. [D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\rtl\protocol_v03_rs485_port.sv:]
+ERROR: [Common 17-180] Spawn failed: No error
+update_compile_order: Time (s): cpu = 00:00:00 ; elapsed = 00:00:05 . Memory (MB): peak = 2114.699 ; gain = 0.000
+ERROR: [Common 17-39] 'update_compile_order' failed due to earlier errors.
+
+    while executing
+"update_compile_order -fileset $sim_set"
+    ("foreach" body line 12)
+    invoked from within
+"foreach {sim_set sim_top} $sim_cases {
+    if {![llength [get_filesets -quiet $sim_set]]} {create_fileset -simset $sim_set}
+    set fs [get_filesets $..."
+    (file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/scripts/setup_gui_simulation.tcl" line 15)
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+exit
+INFO: [Common 17-206] Exiting Vivado at Mon Nov  2 15:52:35 2026...

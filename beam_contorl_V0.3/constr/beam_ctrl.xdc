@@ -5,6 +5,9 @@
 # U4.U8/CFGBVS is tied to DVCC3V3 and bank 0 VCCO is DVCC3V3.
 set_property CFGBVS VCCO [current_design]
 set_property CONFIG_VOLTAGE 3.3 [current_design]
+set_property CONFIG_MODE SPIx1 [current_design]
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
+set_property BITSTREAM.CONFIG.CONFIGRATE 3 [current_design]
 
 # 50 MHz oscillator: Y1.3 -> R10 (22 ohm) -> GCLK -> U4.V20
 set_property PACKAGE_PIN V20 [get_ports {sys_clk_i}]

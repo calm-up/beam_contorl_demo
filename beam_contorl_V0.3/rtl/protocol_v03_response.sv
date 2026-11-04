@@ -17,16 +17,22 @@ module protocol_v03_response #(
     output logic       done_o,
     output logic       tx_byte_valid_o,
     output logic [7:0] tx_byte_o,
+    output logic       tx_active_o,
     output logic       serial_o
 );
-    typedef enum logic [1:0] {IDLE, ISSUE, WAIT_BYTE} state_t;
+    localparam int unsigned TURN_CYCLES = (CLK_HZ / BAUD_RATE) < 2 ?
+                                          2 : (CLK_HZ / BAUD_RATE);
+    localparam int unsigned TURN_W = $clog2(TURN_CYCLES + 1);
+    typedef enum logic [2:0] {IDLE, TURN, ISSUE, WAIT_BYTE, TAIL} state_t;
     state_t state_q;
+    logic [TURN_W-1:0] turn_q;
     logic [3:0] index_q, length_q;
     logic [7:0] array_q, command_q, status_q, sum_q;
     logic [39:0] extra_q;
     logic byte_ready, byte_done;
     logic [7:0] byte_data;
     assign ready_o = state_q == IDLE;
+    assign tx_active_o = state_q != IDLE;
     assign tx_byte_valid_o = (state_q == ISSUE);
     assign tx_byte_o = byte_data;
     always_comb begin
@@ -60,6 +66,7 @@ module protocol_v03_response #(
             status_q <= '0;
             extra_q <= '0;
             sum_q <= '0;
+            turn_q <= '0;
             done_o <= 1'b0;
         end else begin
             done_o <= 1'b0;
@@ -75,18 +82,27 @@ module protocol_v03_response #(
                              (extra_valid_i ? (extra_i[7:0] + extra_i[15:8] +
                               extra_i[23:16] + extra_i[31:24] + extra_i[39:32]) : 8'd0);
                     index_q <= '0;
-                    state_q <= ISSUE;
+                    turn_q <= '0;
+                    state_q <= TURN;
                 end
+                TURN: if (turn_q == TURN_CYCLES - 1) begin
+                    turn_q <= '0;
+                    state_q <= ISSUE;
+                end else turn_q <= turn_q + 1'b1;
                 ISSUE: if (byte_ready) state_q <= WAIT_BYTE;
                 WAIT_BYTE: if (byte_done) begin
                     if (index_q == length_q - 1) begin
-                        done_o <= 1'b1;
-                        state_q <= IDLE;
+                        turn_q <= '0;
+                        state_q <= TAIL;
                     end else begin
                         index_q <= index_q + 1'b1;
                         state_q <= ISSUE;
                     end
                 end
+                TAIL: if (turn_q == TURN_CYCLES - 1) begin
+                    done_o <= 1'b1;
+                    state_q <= IDLE;
+                end else turn_q <= turn_q + 1'b1;
                 default: state_q <= IDLE;
             endcase
         end

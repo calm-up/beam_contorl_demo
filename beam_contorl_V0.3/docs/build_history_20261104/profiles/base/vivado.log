@@ -1,0 +1,90 @@
+#-----------------------------------------------------------
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Sat Oct 31 17:38:01 2026
+# Process ID         : 26108
+# Current directory  : D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/base
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent2432 D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\build\base\beam_control_v03.xpr
+# Log file           : D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/base/vivado.log
+# Journal file       : D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/base\vivado.jou
+# Running On         : LAPTOP-MU049O3G
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 22621
+# Processor Detail   : Intel(R) Core(TM) i9-14900HX
+# CPU Frequency      : 2419 MHz
+# CPU Physical cores : 24
+# CPU Logical cores  : 32
+# Host memory        : 16890 MB
+# Swap memory        : 16106 MB
+# Total Virtual      : 32996 MB
+# Available Virtual  : 12665 MB
+#-----------------------------------------------------------
+start_gui
+open_project D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/base/beam_control_v03.xpr
+INFO: [filemgmt 56-3] Default IP Output Path : Could not find the directory 'D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/base/beam_control_v03.gen/sources_1'.
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Vivado/Vivado/Vivado/2024.2/data/ip'.
+update_compile_order -fileset sources_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-2222] Launching hw_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+****** Xilinx hw_server v2024.2
+  **** Build date : Oct 29 2024 at 10:25:41
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:0
+INFO: [Labtools 27-3417] Launching cs_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+
+******** Xilinx cs_server v2024.2.0
+  ****** Build date   : Oct 31 2024-02:19:07
+    **** Build number : 2024.2.1730312347
+      ** Copyright 2017-2022 Xilinx, Inc. All Rights Reserved.
+      ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+
+
+connect_hw_server: Time (s): cpu = 00:00:00 ; elapsed = 00:00:08 . Memory (MB): peak = 1265.262 ; gain = 16.965
+open_hw_target
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/210251190311
+set_property PROGRAM.FILE {D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\output\s51\beam_control_v03_s51.bit} [get_hw_devices xc7a200t_0]
+set_property PROBES.FILE {D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\output\s51\beam_control_v03_debug.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:\beam_control\beam_control_demo\beam_contorl_demo\beam_contorl_V0.3\output\s51\beam_control_v03_debug.ltx} [get_hw_devices xc7a200t_0]
+current_hw_device [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+INFO: [Labtools 27-1434] Device xc7a200t (JTAG device index = 0) is programmed with a design that has no supported debug core(s) in it.
+WARNING: [Labtools 27-3361] The debug hub core was not detected.
+Resolution: 
+1. Make sure the clock connected to the debug hub (dbg_hub) core is a free running clock and is active.
+2. Make sure the BSCAN_SWITCH_USER_MASK device property in Vivado Hardware Manager reflects the user scan chain setting in the design and refresh the device.  To determine the user scan chain setting in the design, open the implemented design and use 'get_property C_USER_SCAN_CHAIN [get_debug_cores dbg_hub]'.
+For more details on setting the scan chain property, consult the Vivado Debug and Programming User Guide (UG908).
+WARNING: [Labtools 27-3413] Dropping logic core with cellname:'g_ila.u_ila_array' at location 'uuid_28890ACEDFA055B9BFE3D393E3E08BFE' from probes file, since it cannot be found on the programmed device.
+WARNING: [Labtools 27-3413] Dropping logic core with cellname:'g_ila.u_ila_protocol' at location 'uuid_E03D80BFBC1557788E6869BA1A8F93CE' from probes file, since it cannot be found on the programmed device.
+create_hw_cfgmem -hw_device [get_hw_devices xc7a200t_0] -mem_dev [lindex [get_cfgmem_parts {w25q128bv-spi-x1_x2_x4}] 0]
+set_property PROBES.FILE {D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/output/s52/beam_control_v03_debug.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/output/s52/beam_control_v03_debug.ltx} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/output/s52/beam_control_v03_s52.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+program_hw_devices: Time (s): cpu = 00:00:04 ; elapsed = 00:00:06 . Memory (MB): peak = 1326.258 ; gain = 0.000
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+INFO: [Labtools 27-2302] Device xc7a200t (JTAG device index = 0) is programmed with a design that has 2 ILA core(s).
+display_hw_ila_data [ get_hw_ila_data hw_ila_data_1 -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"g_ila.u_ila_array"}]]
+display_hw_ila_data [ get_hw_ila_data hw_ila_data_2 -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"g_ila.u_ila_protocol"}]]
+ERROR: [Labtoolstcl 44-513] HW Target shutdown. Closing target: localhost:3121/xilinx_tcf/Digilent/210251190311
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/210251190311
+INFO: [Labtools 27-1435] Device xc7a200t (JTAG device index = 0) is not programmed (DONE status = 0).
+WARNING: [Labtoolstcl 44-129] No matching hw_ila_data was found.
+ERROR: [Labtoolstcl 44-513] HW Target shutdown. Closing target: localhost:3121/xilinx_tcf/Digilent/210251190311
+exit
+INFO: [Common 17-206] Exiting Vivado at Sat Oct 31 21:32:38 2026...

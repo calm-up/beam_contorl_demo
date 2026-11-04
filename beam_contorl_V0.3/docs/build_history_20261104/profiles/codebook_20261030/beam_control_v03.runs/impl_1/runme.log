@@ -1,0 +1,93 @@
+
+*** Running vivado
+    with args -log beam_ctrl_top.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source beam_ctrl_top.tcl -notrace
+
+
+
+****** Vivado v2024.2 (64-bit)
+  **** SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+  **** IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+  **** SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+  **** Start of session at: Fri Oct 30 21:08:38 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source beam_ctrl_top.tcl -notrace
+Command: link_design -top beam_ctrl_top -part xc7a200tfbg484-1
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Device 21-403] Loading part xc7a200tfbg484-1
+INFO: [Project 1-454] Reading design checkpoint 'd:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.gen/sources_1/ip/ila_v03_array/ila_v03_array.dcp' for cell 'g_ila.u_ila_array'
+INFO: [Project 1-454] Reading design checkpoint 'd:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.gen/sources_1/ip/ila_v03_protocol/ila_v03_protocol.dcp' for cell 'g_ila.u_ila_protocol'
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.168 . Memory (MB): peak = 727.977 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 1699 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2024.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Chipscope 16-324] Core: g_ila.u_ila_array UUID: 28890ace-dfa0-55b9-bfe3-d393e3e08bfe 
+INFO: [Chipscope 16-324] Core: g_ila.u_ila_protocol UUID: e03d80bf-bc15-5778-8e68-69ba1a8f93ce 
+Parsing XDC File [d:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.gen/sources_1/ip/ila_v03_protocol/ila_v6_2/constraints/ila_impl.xdc] for cell 'g_ila.u_ila_protocol/inst'
+Finished Parsing XDC File [d:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.gen/sources_1/ip/ila_v03_protocol/ila_v6_2/constraints/ila_impl.xdc] for cell 'g_ila.u_ila_protocol/inst'
+Parsing XDC File [d:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.gen/sources_1/ip/ila_v03_protocol/ila_v6_2/constraints/ila.xdc] for cell 'g_ila.u_ila_protocol/inst'
+Finished Parsing XDC File [d:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.gen/sources_1/ip/ila_v03_protocol/ila_v6_2/constraints/ila.xdc] for cell 'g_ila.u_ila_protocol/inst'
+Parsing XDC File [d:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.gen/sources_1/ip/ila_v03_array/ila_v6_2/constraints/ila_impl.xdc] for cell 'g_ila.u_ila_array/inst'
+Finished Parsing XDC File [d:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.gen/sources_1/ip/ila_v03_array/ila_v6_2/constraints/ila_impl.xdc] for cell 'g_ila.u_ila_array/inst'
+Parsing XDC File [d:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.gen/sources_1/ip/ila_v03_array/ila_v6_2/constraints/ila.xdc] for cell 'g_ila.u_ila_array/inst'
+Finished Parsing XDC File [d:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.gen/sources_1/ip/ila_v03_array/ila_v6_2/constraints/ila.xdc] for cell 'g_ila.u_ila_array/inst'
+Parsing XDC File [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/constr/beam_ctrl.xdc]
+Finished Parsing XDC File [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/constr/beam_ctrl.xdc]
+Parsing XDC File [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/constr/clock_route_impl.xdc]
+Finished Parsing XDC File [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/constr/clock_route_impl.xdc]
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Project 1-1687] 4 scoped IP constraints or related sub-commands were skipped due to synthesis logic optimizations usually triggered by constant connectivity or unconnected output pins. To review the skipped constraints and messages, run the command 'set_param netlist.IPMsgFiltering false' before opening the design.
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 892.848 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 144 instances were transformed.
+  CFGLUT5 => CFGLUT5 (SRL16E, SRLC32E): 144 instances
+
+12 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:00:05 ; elapsed = 00:00:08 . Memory (MB): peak = 892.848 ; gain = 478.688
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a200t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a200t'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:01 . Memory (MB): peak = 921.180 ; gain = 28.332
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 28993dab3
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1527.637 ; gain = 606.457
+
+Starting Logic Optimization Task
+
+Phase 1 Initialization
+
+Phase 1.1 Core Generation And Design Setup
+
+Phase 1.1.1 Generate And Synthesize Debug Cores
+INFO: [Chipscope 16-329] Generating Script for core instance : dbg_hub 
+ERROR: [Chipscope 16-302] Could not generate core for dbg_hub. Aborting IP Generation operaion. The current Vivado temporary directory path, 'D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/codebook_20261030/beam_control_v03.runs/impl_1/.Xil/Vivado-14116-LAPTOP-MU049O3G', is 156 characters. Errors on the host OS will occur when trying to insert logic for debug core 'dbg_hub' when temporary directory paths exceed 146 characters. Please move this Vivado project or the Vivado working directory to a shorter path; alternately consider using the OS subst command to map part of the path to a drive letter.
+  
+	
+Phase 1.1.1 Generate And Synthesize Debug Cores | Checksum: 28993dab3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 1934.637 ; gain = 0.000
+Phase 1.1 Core Generation And Design Setup | Checksum: 28993dab3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.019 . Memory (MB): peak = 1934.637 ; gain = 0.000
+Phase 1 Initialization | Checksum: 28993dab3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.020 . Memory (MB): peak = 1934.637 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Implementation
+19 Infos, 0 Warnings, 0 Critical Warnings and 2 Errors encountered.
+opt_design failed
+ERROR: [Chipscope 16-338] Implementing debug Cores failed due to earlier errors
+INFO: [Common 17-206] Exiting Vivado at Fri Oct 30 21:09:00 2026...

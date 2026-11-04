@@ -1,0 +1,18 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/tri_fun.v" into library work
+INFO: [VRFC 10-311] analyzing module tri_fun
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/wave_veight.v" into library work
+INFO: [VRFC 10-311] analyzing module wave_veight
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/group_gen.v" into library work
+INFO: [VRFC 10-311] analyzing module group_gen
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/cal_formula.v" into library work
+INFO: [VRFC 10-311] analyzing module cal_formula
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/cal_axi.v" into library work
+INFO: [VRFC 10-311] analyzing module cal_axi
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/cal_phase.v" into library work
+INFO: [VRFC 10-311] analyzing module cal_phase
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/sim/bjn110_algorithm/rom_models.sv" into library work
+INFO: [VRFC 10-311] analyzing module tri_ram
+INFO: [VRFC 10-311] analyzing module fuxing_fs
+INFO: [VRFC 10-311] analyzing module fuxing_js
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/sim/bjn110_algorithm/tb_bjn110_math.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_bjn110_math

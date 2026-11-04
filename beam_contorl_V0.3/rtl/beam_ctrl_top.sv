@@ -1,8 +1,10 @@
 `timescale 1ns/1ps
 
-// XC7A200T board wrapper. V0.3 RS422 owns the core command path.
+// XC7A200T board wrapper. J21 and J18 RS485 share the V0.3 command path.
 module beam_ctrl_top #(
     parameter bit ENABLE_DEBUG_ILA = 1'b0,
+    parameter bit ENABLE_DIAG = ENABLE_DEBUG_ILA,
+    parameter bit ENABLE_CHIP_INIT = 1'b1,
     parameter int unsigned SYS_CLK_HZ = 50_000_000,
     parameter int unsigned UART_BAUD = 115_200,
     parameter logic [15:0] CHIP_CID_MAP = 16'h3210,
@@ -31,14 +33,15 @@ module beam_ctrl_top #(
     input  wire        u22_miso_i,
     output wire        u22_wp_n_o,
     output wire        u22_hold_n_o,
-    output wire [31:0] rx_sdi_o,
+    output wire [31:0] rx_sdi_o,    //jieshou 每颗芯片配1位
     output wire [7:0]  rx_clk_o,
     output wire [7:0]  rx_csb_o,
     output wire [7:0]  rx_ldb_o,
     output wire [7:0]  rx_rstn_o,
     output wire [7:0]  rx_t_o,
     output wire [7:0]  rx_r_o,
-    output wire [31:0] tx_sdi_o,
+    
+    output wire [31:0] tx_sdi_o,    //fashe
     output wire [7:0]  tx_clk_o,
     output wire [7:0]  tx_csb_o,
     output wire [7:0]  tx_ldb_o,
@@ -54,13 +57,8 @@ module beam_ctrl_top #(
         else por_count_q <= por_count_q + 1'b1;
     end
     wire rst = !por_done_q;
-    (* KEEP = "true" *) wire unused_inputs = ^{
-        rx_sdo_i, tx_sdo_i, debug_rs485_rx_i, spare_rs485_rx_i
-    };
-    assign debug_rs485_tx_o = 1'b0;
-    assign debug_rs485_dir_o = 1'b0;
-    assign spare_rs485_tx_o = 1'b0;
-    assign spare_rs485_dir_o = 1'b0;
+    (* KEEP = "true" *) wire unused_inputs = rs422_rx_i;
+    assign rs422_tx_o = 1'b1;
 
     // U22 is independent of the U5 configuration Flash. Writes require the
     // exact expected JEDEC ID and are confined to the selected U22 half.
@@ -130,30 +128,64 @@ module beam_ctrl_top #(
         .done_o(flash_spi_done), .rx_data_o(flash_rx_data)
     );
 
-    wire rx_byte_valid, rx_byte_error;
-    wire [7:0] rx_byte;
+    wire [1:0] rx_byte_valid, rx_byte_error;
+    wire dispatcher_busy;
+    wire [7:0] rx_byte [0:1];
+    wire [1:0] port_frame_valid, port_frame_error;
+    wire [7:0] port_command [0:1], port_array [0:1], port_payload_len [0:1];
+    wire [447:0] port_payload [0:1];
+    wire [5:0] port_rx_index [0:1];
+    logic active_port_q;
+    wire select_debug = !dispatcher_busy && port_frame_valid[0];
+    wire select_spare = !dispatcher_busy && !port_frame_valid[0] && port_frame_valid[1];
     wire frame_valid, frame_error;
     wire [7:0] frame_error_status, frame_command, frame_array, payload_len;
     wire [447:0] frame_payload;
     wire [5:0] rx_index;
-    uart_rx #(.CLK_HZ(SYS_CLK_HZ), .BAUD_RATE(UART_BAUD)) u_uart_rx (
-        .clk_i(sys_clk_i), .rst_i(rst), .serial_i(rs422_rx_i),
-        .data_valid_o(rx_byte_valid), .data_o(rx_byte), .frame_error_o(rx_byte_error)
-    );
-    protocol_v03_parser u_parser (
-        .clk_i(sys_clk_i), .rst_i(rst), .byte_valid_i(rx_byte_valid),
-        .byte_i(rx_byte), .uart_error_i(rx_byte_error),
-        .frame_valid_o(frame_valid), .frame_error_o(frame_error),
-        .error_status_o(frame_error_status), .command_o(frame_command),
-        .array_o(frame_array), .payload_len_o(payload_len),
-        .payload_o(frame_payload), .rx_index_o(rx_index)
-    );
+    genvar port;
+    generate for (port=0;port<2;port=port+1) begin : g_receive
+        uart_rx #(.CLK_HZ(SYS_CLK_HZ), .BAUD_RATE(UART_BAUD)) u_uart_rx (
+            .clk_i(sys_clk_i), .rst_i(rst),
+            .serial_i(port == 0 ? debug_rs485_rx_i : spare_rs485_rx_i),
+            .data_valid_o(rx_byte_valid[port]), .data_o(rx_byte[port]),
+            .frame_error_o(rx_byte_error[port])
+        );
+        protocol_v03_parser u_parser (
+            .clk_i(sys_clk_i), .rst_i(rst), .byte_valid_i(rx_byte_valid[port]),
+            .byte_i(rx_byte[port]), .uart_error_i(rx_byte_error[port]),
+            .frame_valid_o(port_frame_valid[port]),
+            .frame_error_o(port_frame_error[port]), .error_status_o(),
+            .command_o(port_command[port]), .array_o(port_array[port]),
+            .payload_len_o(port_payload_len[port]),
+            .payload_o(port_payload[port]), .rx_index_o(port_rx_index[port])
+        );
+    end endgenerate
+    assign frame_valid = select_debug || select_spare;
+    assign frame_error = |port_frame_error;
+    assign frame_error_status = 8'h02;
+    assign frame_command = select_debug ? port_command[0] : port_command[1];
+    assign frame_array = select_debug ? port_array[0] : port_array[1];
+    assign payload_len = select_debug ? port_payload_len[0] : port_payload_len[1];
+    assign frame_payload = select_debug ? port_payload[0] : port_payload[1];
+    assign rx_index = port_rx_index[0];
+    always_ff @(posedge sys_clk_i) begin
+        if (rst) active_port_q <= 1'b0;
+        else if (frame_valid) active_port_q <= select_spare;
+    end
 
     wire channel_start, channel_array, channel_enable;
     wire [2:0] channel_line;
     wire [1:0] channel_chip, channel_index;
     wire [5:0] channel_phase, channel_atten;
     wire channel_busy, channel_done, channel_error;
+    wire beam_calc_start, beam_batch_start, beam_array;
+    wire [15:0] beam_frequency;
+    wire signed [15:0] beam_azimuth, beam_elevation;
+    wire [7:0] beam_lines;
+    wire [3:0] beam_chips, beam_channels;
+    wire [767:0] beam_phase;
+    wire [127:0] beam_enable;
+    wire beam_calc_busy, beam_calc_done, beam_batch_done, beam_batch_error;
     wire [7:0] channel_rx_enable, channel_tx_enable;
     wire channel_core_valid, channel_core_write, channel_core_load;
     wire [1:0] channel_core_array;
@@ -161,11 +193,38 @@ module beam_ctrl_top #(
     wire [767:0] channel_rx_frames, channel_tx_frames;
     wire [15:0] accepted_count, completed_count, rejected_count;
     wire core_ready, core_busy, core_write_done, core_load_done, core_error, core_init;
+    wire core_reset_done, core_init_fault;
+    wire read_start, read_array, read_busy, read_done, read_error;
+    wire [2:0] read_line, read_function;
+    wire [1:0] read_chip, read_core_array;
+    wire [7:0] read_address, read_core_lines;
+    wire [23:0] read_value;
+    wire [767:0] read_core_frames;
+    wire read_core_valid;
+    wire [191:0] core_rx_sdo_last, core_tx_sdo_last;
+    wire diag_start, diag_load, diag_array, diag_done, diag_error, diag_busy;
+    wire [2:0] diag_line;
+    wire [1:0] diag_chip, diag_core_array;
+    wire [23:0] diag_frame;
+    wire [7:0] diag_core_lines;
+    wire [767:0] diag_core_frames;
+    wire diag_core_valid, diag_core_write, diag_core_load;
     wire clear_valid;
     wire [1:0] clear_array;
     wire [7:0] clear_lines;
+    beam_phase_calc u_beam_calc (
+        .clk_i(sys_clk_i), .rst_i(rst), .start_i(beam_calc_start),
+        .frequency_i(beam_frequency), .azimuth_i(beam_azimuth),
+        .elevation_i(beam_elevation), .line_mask_i(beam_lines),
+        .chip_mask_i(beam_chips), .channel_mask_i(beam_channels),
+        .busy_o(beam_calc_busy), .done_o(beam_calc_done),
+        .phase_codes_o(beam_phase), .enable_bits_o(beam_enable)
+    );
     channel_executor #(.CID_MAP(CHIP_CID_MAP)) u_channel (
         .clk_i(sys_clk_i), .rst_i(rst), .command_valid_i(channel_start),
+        .batch_valid_i(beam_batch_start), .batch_array_i(beam_array),
+        .batch_phase_i(beam_phase), .batch_enable_i(beam_enable),
+        .batch_done_o(beam_batch_done), .batch_error_o(beam_batch_error),
         .command_error_i(1'b0), .clear_valid_i(clear_valid),
         .clear_array_i(clear_array), .clear_lines_i(clear_lines),
         .array_i(channel_array), .line_i(channel_line),
@@ -182,6 +241,28 @@ module beam_ctrl_top #(
         .done_o(channel_done), .error_o(channel_error),
         .accepted_count_o(accepted_count), .completed_count_o(completed_count),
         .rejected_count_o(rejected_count)
+    );
+    chip_sdo_reader #(.CID_MAP(CHIP_CID_MAP),
+                      .TIMEOUT_CYCLES(SYS_CLK_HZ/10)) u_sdo_reader (
+        .clk_i(sys_clk_i), .rst_i(rst), .start_i(read_start),
+        .array_i(read_array), .line_i(read_line), .chip_i(read_chip),
+        .function_i(read_function), .address_i(read_address),
+        .core_ready_i(core_ready), .core_write_done_i(core_write_done),
+        .core_error_i(core_error), .rx_sdo_last_i(core_rx_sdo_last),
+        .tx_sdo_last_i(core_tx_sdo_last), .core_valid_o(read_core_valid),
+        .core_array_o(read_core_array), .core_lines_o(read_core_lines),
+        .core_frames_o(read_core_frames), .busy_o(read_busy),
+        .done_o(read_done), .error_o(read_error), .value_o(read_value)
+    );
+    chip_diag_op #(.CID_MAP(CHIP_CID_MAP)) u_diag (
+        .clk_i(sys_clk_i), .rst_i(rst), .start_i(diag_start), .load_i(diag_load),
+        .array_i(diag_array), .line_i(diag_line), .chip_i(diag_chip), .frame_i(diag_frame),
+        .core_ready_i(core_ready), .core_write_done_i(core_write_done),
+        .core_load_done_i(core_load_done), .core_error_i(core_error),
+        .core_valid_o(diag_core_valid), .core_write_o(diag_core_write),
+        .core_load_o(diag_core_load), .core_array_o(diag_core_array),
+        .core_lines_o(diag_core_lines), .core_frames_o(diag_core_frames),
+        .busy_o(diag_busy), .done_o(diag_done), .error_o(diag_error)
     );
 
     wire reset_start, target_reset_busy, target_reset_done;
@@ -202,13 +283,36 @@ module beam_ctrl_top #(
     wire [7:0] response_array, response_command, response_status, response_byte;
     wire [39:0] response_extra;
     wire response_byte_valid;
-    protocol_v03_response #(.CLK_HZ(SYS_CLK_HZ), .BAUD_RATE(UART_BAUD)) u_response (
-        .clk_i(sys_clk_i), .rst_i(rst), .start_i(response_start),
-        .array_i(response_array), .original_command_i(response_command),
-        .status_i(response_status), .extra_valid_i(response_extra_valid),
-        .extra_i(response_extra), .ready_o(response_ready), .done_o(response_done),
-        .tx_byte_valid_o(response_byte_valid), .tx_byte_o(response_byte),
-        .serial_o(rs422_tx_o)
+    wire [1:0] port_main_ready, port_main_done, port_response_byte_valid;
+    wire [7:0] port_response_byte [0:1];
+    assign response_ready = active_port_q ? port_main_ready[1] : port_main_ready[0];
+    assign response_done = active_port_q ? port_main_done[1] : port_main_done[0];
+    assign response_byte_valid = active_port_q ?
+                                 port_response_byte_valid[1] : port_response_byte_valid[0];
+    assign response_byte = active_port_q ? port_response_byte[1] : port_response_byte[0];
+    protocol_v03_rs485_port #(.CLK_HZ(SYS_CLK_HZ), .BAUD_RATE(UART_BAUD)) u_debug_port (
+        .clk_i(sys_clk_i), .rst_i(rst), .main_start_i(response_start && !active_port_q),
+        .main_array_i(response_array), .main_command_i(response_command),
+        .main_status_i(response_status), .main_extra_valid_i(response_extra_valid),
+        .main_extra_i(response_extra), .main_ready_o(port_main_ready[0]),
+        .main_done_o(port_main_done[0]),
+        .busy_request_i(port_frame_valid[0] && !select_debug),
+        .busy_array_i(port_array[0]), .busy_command_i(port_command[0]),
+        .tx_o(debug_rs485_tx_o), .dir_o(debug_rs485_dir_o),
+        .tx_byte_valid_o(port_response_byte_valid[0]),
+        .tx_byte_o(port_response_byte[0])
+    );
+    protocol_v03_rs485_port #(.CLK_HZ(SYS_CLK_HZ), .BAUD_RATE(UART_BAUD)) u_spare_port (
+        .clk_i(sys_clk_i), .rst_i(rst), .main_start_i(response_start && active_port_q),
+        .main_array_i(response_array), .main_command_i(response_command),
+        .main_status_i(response_status), .main_extra_valid_i(response_extra_valid),
+        .main_extra_i(response_extra), .main_ready_o(port_main_ready[1]),
+        .main_done_o(port_main_done[1]),
+        .busy_request_i(port_frame_valid[1] && !select_spare),
+        .busy_array_i(port_array[1]), .busy_command_i(port_command[1]),
+        .tx_o(spare_rs485_tx_o), .dir_o(spare_rs485_dir_o),
+        .tx_byte_valid_o(port_response_byte_valid[1]),
+        .tx_byte_o(port_response_byte[1])
     );
     wire [7:0] rx_gate, tx_gate;
     wire [7:0] rx_pulse_mode, tx_pulse_mode;
@@ -221,15 +325,18 @@ module beam_ctrl_top #(
         .clk_i(sys_clk_i), .rst_i(rst), .mode_i(tx_pulse_mode),
         .tx_active_o(pulse_tx_active), .rx_active_o()
     );
-    wire dispatcher_busy;
     wire [3:0] dispatcher_state;
-    protocol_v03_dispatcher u_dispatcher (
+    protocol_v03_dispatcher #(.ENABLE_DIAG(ENABLE_DIAG), .CID_MAP(CHIP_CID_MAP)) u_dispatcher (
         .clk_i(sys_clk_i), .rst_i(rst), .frame_valid_i(frame_valid),
         .frame_error_i(frame_error), .command_i(frame_command),
         .array_i(frame_array), .payload_len_i(payload_len),
         .payload_i(frame_payload), .init_done_i(core_init),
+        .chip_reset_done_i(core_reset_done), .init_fault_i(core_init_fault),
         .core_ready_i(core_ready), .channel_busy_i(channel_busy),
         .channel_done_i(channel_done), .channel_error_i(channel_error),
+        .beam_calc_busy_i(beam_calc_busy), .beam_calc_done_i(beam_calc_done),
+        .batch_busy_i(channel_busy), .batch_done_i(beam_batch_done),
+        .batch_error_i(beam_batch_error),
         .rx_enable_i(channel_rx_enable), .tx_enable_i(channel_tx_enable),
         .reset_busy_i(target_reset_busy), .reset_done_i(target_reset_done),
         .response_ready_i(response_ready), .response_done_i(response_done),
@@ -239,10 +346,23 @@ module beam_ctrl_top #(
         .flash_error_i(flash_error),
         .flash_loaded_count_i(flash_loaded_count),
         .flash_cache_sample_i(flash_cache_sample),
+        .read_done_i(read_done), .read_error_i(read_error),
+        .read_value_i(read_value), .read_start_o(read_start),
+        .diag_done_i(diag_done), .diag_error_i(diag_error), .diag_start_o(diag_start),
+        .diag_load_o(diag_load), .diag_array_o(diag_array), .diag_line_o(diag_line),
+        .diag_chip_o(diag_chip), .diag_frame_o(diag_frame),
+        .read_array_o(read_array), .read_line_o(read_line),
+        .read_chip_o(read_chip), .read_function_o(read_function),
+        .read_address_o(read_address),
         .channel_start_o(channel_start), .channel_array_o(channel_array),
         .channel_line_o(channel_line), .channel_chip_o(channel_chip),
         .channel_index_o(channel_index), .channel_enable_o(channel_enable),
         .channel_phase_o(channel_phase), .channel_atten_o(channel_atten),
+        .beam_calc_start_o(beam_calc_start), .beam_batch_start_o(beam_batch_start),
+        .beam_array_o(beam_array), .beam_frequency_o(beam_frequency),
+        .beam_azimuth_o(beam_azimuth), .beam_elevation_o(beam_elevation),
+        .beam_lines_o(beam_lines), .beam_chips_o(beam_chips),
+        .beam_channels_o(beam_channels),
         .clear_valid_o(clear_valid), .clear_array_o(clear_array),
         .clear_lines_o(clear_lines), .reset_start_o(reset_start),
         .reset_array_o(reset_array), .reset_lines_o(reset_lines),
@@ -262,6 +382,7 @@ module beam_ctrl_top #(
     wire [7:0] core_rx_clk, core_rx_csb, core_rx_ldb, core_rx_rstn;
     wire [7:0] core_tx_clk, core_tx_csb, core_tx_ldb, core_tx_rstn;
     beam_ctrl_core #(
+        .ENABLE_CHIP_INIT(ENABLE_CHIP_INIT), .CID_MAP(CHIP_CID_MAP),
         .SERIAL_HALF_PERIOD_CYCLES(SERIAL_HALF_PERIOD_CYCLES),
         .POST_FRAME_CLOCKS(POST_FRAME_CLOCKS),
         .RESET_CLK_CYCLES(RESET_CLK_CYCLES),
@@ -270,14 +391,23 @@ module beam_ctrl_top #(
         .LDB_LOW_CYCLES(LDB_LOW_CYCLES)
     ) u_core (
         .clk_i(sys_clk_i), .rst_i(rst),
-        .cmd_valid_i(channel_core_valid && !target_reset_busy),
-        .cmd_ready_o(core_ready), .cmd_array_sel_i(channel_core_array),
-        .cmd_line_mask_i(channel_core_lines),
-        .cmd_rx_frames_i(channel_rx_frames), .cmd_tx_frames_i(channel_tx_frames),
-        .cmd_write_i(channel_core_write), .cmd_load_i(channel_core_load),
+        .reinit_start_i(target_reset_done),
+        .reinit_array_i(active_reset_array), .reinit_lines_i(active_reset_lines),
+        .cmd_valid_i((channel_core_valid || read_core_valid || diag_core_valid) && !target_reset_busy),
+        .cmd_ready_o(core_ready),
+        .cmd_array_sel_i(read_core_valid ? read_core_array : diag_core_valid ? diag_core_array : channel_core_array),
+        .cmd_line_mask_i(read_core_valid ? read_core_lines : diag_core_valid ? diag_core_lines : channel_core_lines),
+        .cmd_rx_frames_i(read_core_valid ? read_core_frames : diag_core_valid ? diag_core_frames : channel_rx_frames),
+        .cmd_tx_frames_i(read_core_valid ? read_core_frames : diag_core_valid ? diag_core_frames : channel_tx_frames),
+        .cmd_write_i(read_core_valid || (diag_core_valid ? diag_core_write : channel_core_write)),
+        .cmd_load_i(!read_core_valid && (diag_core_valid ? diag_core_load : channel_core_load)),
         .busy_o(core_busy), .write_done_o(core_write_done),
         .load_done_o(core_load_done), .error_o(core_error),
-        .init_done_o(core_init), .rx_sdi_o(core_rx_sdi),
+        .init_done_o(core_init), .reset_done_o(core_reset_done),
+        .init_fault_o(core_init_fault),
+        .rx_sdo_i(rx_sdo_i), .tx_sdo_i(tx_sdo_i),
+        .rx_sdo_last_o(core_rx_sdo_last), .tx_sdo_last_o(core_tx_sdo_last),
+        .rx_sdi_o(core_rx_sdi),
         .rx_clk_o(core_rx_clk), .rx_csb_o(core_rx_csb),
         .rx_ldb_o(core_rx_ldb), .rx_rstn_o(core_rx_rstn),
         .tx_sdi_o(core_tx_sdi), .tx_clk_o(core_tx_clk),
@@ -313,17 +443,19 @@ module beam_ctrl_top #(
     // Both sample the free-running 50 MHz FPGA clock.
     generate if (ENABLE_DEBUG_ILA) begin : g_ila
         ila_v03_protocol u_ila_protocol (
-            .clk(sys_clk_i), .probe0(rx_byte), .probe1(rx_byte_valid),
+            .clk(sys_clk_i), .probe0(rx_byte[0]), .probe1(rx_byte_valid[0]),
             .probe2(rx_index), .probe3(frame_command), .probe4(dispatcher_state),
             .probe5(response_status), .probe6(response_byte),
-            .probe7(response_byte_valid), .probe8({frame_valid,frame_error,channel_done,channel_error})
+            .probe7(response_byte_valid), .probe8({frame_valid,frame_error,channel_done,channel_error}),
+            .probe9(read_value), .probe10({read_busy,read_done,read_error})
         );
         ila_v03_array u_ila_array (
             .clk(sys_clk_i), .probe0(rx_sdi_o[3:0]), .probe1(rx_clk_o[0]),
             .probe2(rx_csb_o[0]), .probe3(rx_ldb_o[0]), .probe4(rx_rstn_o[0]),
             .probe5(rx_r_o[0]), .probe6(channel_rx_frames[23:0]),
             .probe7({channel_start,channel_busy,core_write_done,core_load_done,
-                     reset_start,target_reset_busy,target_reset_done,core_error})
+                     reset_start,target_reset_busy,target_reset_done,core_error}),
+            .probe8(rx_sdo_i[0])
         );
     end endgenerate
 endmodule

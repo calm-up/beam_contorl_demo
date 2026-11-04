@@ -1,0 +1,15 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
+| Date         : Mon Oct 26 23:54:17 2026
+| Host         : LAPTOP-MU049O3G running 64-bit major release  (build 9200)
+| Command      : report_bus_skew -warn_on_violation -file beam_ctrl_top_bus_skew_routed.rpt -pb beam_ctrl_top_bus_skew_routed.pb -rpx beam_ctrl_top_bus_skew_routed.rpx
+| Design       : beam_ctrl_top
+| Device       : 7a200t-fbg484
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Bus Skew Report
+
+No bus skew constraints
+

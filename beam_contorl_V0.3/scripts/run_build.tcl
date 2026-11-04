@@ -25,6 +25,17 @@ if {[get_property STATUS [get_runs impl_1]] ne "write_bitstream Complete!"} {
     error "Implementation failed: [get_property STATUS [get_runs impl_1]]"
 }
 open_run impl_1
+set cfg_log [open [file join $report_dir spi_config_properties.txt] w]
+foreach {property expected} {CFGBVS VCCO CONFIG_VOLTAGE 3.3 CONFIG_MODE SPIx1 BITSTREAM.CONFIG.SPI_BUSWIDTH 1 BITSTREAM.CONFIG.CONFIGRATE 3} {
+    set actual [get_property $property [current_design]]
+    puts $cfg_log "$property=$actual expected=$expected"
+    if {![string equal -nocase $actual $expected] &&
+        !([string is double -strict $actual] && [string is double -strict $expected] && $actual == $expected)} {
+        close $cfg_log
+        error "SPI configuration mismatch: $property=$actual expected=$expected"
+    }
+}
+close $cfg_log
 report_drc -file [file join $report_dir drc_impl.rpt]
 report_timing_summary -delay_type min_max -report_unconstrained -file [file join $report_dir timing_impl.rpt]
 report_utilization -file [file join $report_dir utilization_impl.rpt]

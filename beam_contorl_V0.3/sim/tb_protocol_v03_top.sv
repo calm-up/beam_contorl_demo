@@ -1,10 +1,26 @@
 `timescale 1ns/1ps
 
-module tb_protocol_v03_top;
+module tb_protocol_v03_top #(
+    parameter bit BOARD_TIMING = 1'b1
+);
+    localparam int TB_CLK_HZ = BOARD_TIMING ? 50_000_000 : 1_000_000;
+    localparam int TB_BAUD = BOARD_TIMING ? 115_200 : 100_000;
+    localparam int UART_BIT_CYCLES = TB_CLK_HZ / TB_BAUD;
+    bit capture_commands = 0;
+    integer startup_frames = 0;
+    // UART integration regression, not the hardware top. Select THIS module
+    // as simulation top. Default BOARD_TIMING=1 matches s53 hardware timing.
+    // BOARD_TIMING=0 retains the legacy accelerated regression.
+    // mock_sdo is a supplied response, not a validated physical chip model.
+    logic [7:0] active_command = 0;
     logic sys_clk_i = 0;
     always #10 sys_clk_i = ~sys_clk_i;
-    logic rs422_rx_i = 1;
+    logic debug_rx_i = 1;
+    wire debug_tx_o;
     wire rs422_tx_o;
+    logic spare_rx_i = 1;
+    wire spare_tx_o;
+    bit use_spare = 0;
     wire [31:0] rx_sdi_o, tx_sdi_o;
     wire [7:0] rx_clk_o, rx_csb_o, rx_ldb_o, rx_rstn_o, rx_t_o, rx_r_o;
     wire [7:0] tx_clk_o, tx_csb_o, tx_ldb_o, tx_rstn_o, tx_t_o, tx_r_o;
@@ -70,19 +86,27 @@ module tb_protocol_v03_top;
         end
     end
     reg [7:0] response [0:14];
-    reg [23:0] captured_frame [0:15];
+    reg [23:0] captured_frame [0:31];
+    reg [23:0] captured_line7 [0:15];
     integer frame_count = 0, bit_count = 0, load_count = 0, reset_edges = 0;
+    integer line7_frame_count = 0, line7_bit_count = 0;
+    integer sdo_bit_index = -1;
+    logic sdo_bit_q = 1'b0;
+    logic [23:0] mock_sdo = 24'h2C0C08;
     reg [23:0] shift_frame = 0;
+    reg [23:0] shift_line7 = 0;
     beam_ctrl_top #(
-        .SYS_CLK_HZ(1_000_000), .UART_BAUD(100_000),
-        .POR_CYCLES(2), .SERIAL_HALF_PERIOD_CYCLES(2),
-        .RESET_CLK_CYCLES(128), .POST_RESET_CYCLES(3),
-        .CSB_TO_LDB_CYCLES(3), .LDB_LOW_CYCLES(2)
+        .SYS_CLK_HZ(TB_CLK_HZ), .UART_BAUD(TB_BAUD),
+        .ENABLE_DIAG(1'b1),
+        .ENABLE_CHIP_INIT(BOARD_TIMING),
+        .POR_CYCLES(BOARD_TIMING ? 4 : 2), .SERIAL_HALF_PERIOD_CYCLES(BOARD_TIMING ? 5 : 2),
+        .RESET_CLK_CYCLES(128), .POST_RESET_CYCLES(BOARD_TIMING ? 10 : 3),
+        .CSB_TO_LDB_CYCLES(BOARD_TIMING ? 10 : 3), .LDB_LOW_CYCLES(BOARD_TIMING ? 5 : 2)
     ) dut (
-        .sys_clk_i(sys_clk_i), .rx_sdo_i(8'b0), .tx_sdo_i(8'b0),
-        .rs422_rx_i(rs422_rx_i), .rs422_tx_o(rs422_tx_o),
-        .debug_rs485_rx_i(1'b1), .debug_rs485_tx_o(), .debug_rs485_dir_o(),
-        .spare_rs485_rx_i(1'b1), .spare_rs485_tx_o(), .spare_rs485_dir_o(),
+        .sys_clk_i(sys_clk_i), .rx_sdo_i({7'b0,sdo_bit_q}), .tx_sdo_i(8'b0),
+        .rs422_rx_i(1'b1), .rs422_tx_o(rs422_tx_o),
+        .debug_rs485_rx_i(debug_rx_i), .debug_rs485_tx_o(debug_tx_o), .debug_rs485_dir_o(),
+        .spare_rs485_rx_i(spare_rx_i), .spare_rs485_tx_o(spare_tx_o), .spare_rs485_dir_o(),
         .u22_cs_n_o(u22_cs_n), .u22_sck_o(u22_sck), .u22_mosi_o(u22_mosi),
         .u22_miso_i(u22_miso), .u22_wp_n_o(u22_wp_n),
         .u22_hold_n_o(u22_hold_n),
@@ -92,7 +116,23 @@ module tb_protocol_v03_top;
         .tx_csb_o(tx_csb_o), .tx_ldb_o(tx_ldb_o), .tx_rstn_o(tx_rstn_o),
         .tx_t_o(tx_t_o), .tx_r_o(tx_r_o)
     );
-    always @(negedge rx_csb_o[0]) begin bit_count = 0; shift_frame = 0; end
+    if (BOARD_TIMING) begin : g_board_timing
+        tb_s53_pin_timing rx_timing(rx_clk_o[0], rx_csb_o[0], rx_ldb_o[0], rx_rstn_o[0]);
+        tb_s53_pin_timing tx_timing(tx_clk_o[0], tx_csb_o[0], tx_ldb_o[0], tx_rstn_o[0]);
+    end
+    always @(negedge rx_csb_o[0]) begin
+        bit_count = 0;
+        shift_frame = 0;
+        sdo_bit_index = 23;
+        sdo_bit_q = 1'b0;
+        #1;
+        if (capture_commands && dut.u_channel.batch_mode_q && rx_csb_o !== 8'h00)
+            $fatal(1,"batch CSB is not parallel: %h",rx_csb_o);
+    end
+    always @(negedge rx_clk_o[0]) if (sdo_bit_index >= 0) begin
+        sdo_bit_q = mock_sdo[sdo_bit_index];
+        sdo_bit_index = sdo_bit_index - 1;
+    end
     always @(posedge rx_clk_o[0]) begin
         #1;
         if (!rx_rstn_o[0]) reset_edges = reset_edges + 1;
@@ -102,24 +142,42 @@ module tb_protocol_v03_top;
         end
     end
     always @(posedge rx_csb_o[0]) begin
-        if (bit_count == 24) begin
+        if (!capture_commands && bit_count == 24) startup_frames = startup_frames + 1;
+        if (capture_commands && bit_count == 24) begin
+            if (frame_count >= 32) $fatal(1,"command capture overflow");
             captured_frame[frame_count] = shift_frame;
             frame_count = frame_count + 1;
         end
     end
     always @(negedge rx_ldb_o[0]) load_count = load_count + 1;
+    always @(negedge rx_csb_o[7]) begin line7_bit_count = 0; shift_line7 = 0; end
+    always @(posedge rx_clk_o[7]) begin
+        #1;
+        if (!rx_csb_o[7] && line7_bit_count < 24) begin
+            shift_line7 = {shift_line7[22:0],rx_sdi_o[30]};
+            line7_bit_count = line7_bit_count + 1;
+        end
+    end
+    always @(posedge rx_csb_o[7]) begin
+        if (capture_commands && line7_bit_count == 24) begin
+            captured_line7[line7_frame_count] = shift_line7;
+            line7_frame_count = line7_frame_count + 1;
+        end
+    end
 
     task automatic put_byte(input reg [7:0] value);
         integer bit_index;
         begin
-            @(negedge sys_clk_i); rs422_rx_i = 0;
-            repeat (10) @(negedge sys_clk_i);
+            @(negedge sys_clk_i);
+            if (use_spare) spare_rx_i = 0; else debug_rx_i = 0;
+            repeat (UART_BIT_CYCLES) @(negedge sys_clk_i);
             for (bit_index=0;bit_index<8;bit_index=bit_index+1) begin
-                rs422_rx_i = value[bit_index];
-                repeat (10) @(negedge sys_clk_i);
+                if (use_spare) spare_rx_i = value[bit_index];
+                else debug_rx_i = value[bit_index];
+                repeat (UART_BIT_CYCLES) @(negedge sys_clk_i);
             end
-            rs422_rx_i = 1;
-            repeat (10) @(negedge sys_clk_i);
+            if (use_spare) spare_rx_i = 1; else debug_rx_i = 1;
+            repeat (UART_BIT_CYCLES) @(negedge sys_clk_i);
         end
     endtask
     task automatic send_request(input reg [7:0] command, input reg [7:0] array,
@@ -129,6 +187,9 @@ module tb_protocol_v03_top;
         integer i;
         begin
             length = data_size + 8;
+            active_command = command;
+            $display("UART_REQUEST t=%0t cmd=%02h array=%02h bytes=%0d bad_checksum=%0b",
+                     $time, command, array, data_size+8, bad_checksum);
             sum = 8'h01 + length + command + array;
             put_byte(8'hAA); put_byte(8'hDD); put_byte(8'h01);
             put_byte(length); put_byte(command); put_byte(array);
@@ -143,11 +204,12 @@ module tb_protocol_v03_top;
     task automatic read_byte(output reg [7:0] value);
         integer i;
         begin
-            @(negedge rs422_tx_o);
-            repeat (15) @(posedge sys_clk_i);
+            if (use_spare) @(negedge spare_tx_o);
+            else @(negedge debug_tx_o);
+            repeat (UART_BIT_CYCLES + UART_BIT_CYCLES/2) @(posedge sys_clk_i);
             for (i=0;i<8;i=i+1) begin
-                value[i] = rs422_tx_o;
-                repeat (10) @(posedge sys_clk_i);
+                value[i] = use_spare ? spare_tx_o : debug_tx_o;
+                repeat (UART_BIT_CYCLES) @(posedge sys_clk_i);
             end
         end
     endtask
@@ -168,6 +230,8 @@ module tb_protocol_v03_top;
             sum = 0;
             for (i=2;i<length-2;i=i+1) sum = sum + response[i];
             if (response[length-2] !== sum) $fatal(1,"response checksum wrong");
+            $display("UART_RESPONSE t=%0t cmd=%02h status=%02h PASS",
+                     $time, command, response[7]);
         end
     endtask
     task automatic exchange(input reg [7:0] command, input reg [7:0] array,
@@ -183,8 +247,24 @@ module tb_protocol_v03_top;
     endtask
     initial begin : main
         reg [447:0] payload;
-        repeat (2000) @(posedge sys_clk_i);
+        integer frames_before_reject;
+        integer loads_before_reject;
+        $display("TIMING_CONFIG board=%0b clock=50MHz uart_div=%0d spi_half=%0d ldb_cycles=%0d init=%0b",
+                 BOARD_TIMING, UART_BIT_CYCLES, dut.SERIAL_HALF_PERIOD_CYCLES,
+                 dut.LDB_LOW_CYCLES, BOARD_TIMING);
+        wait (dut.core_init === 1'b1 && dut.flash_probe_done === 1'b1);
+        repeat (20) @(negedge sys_clk_i);
+        if (BOARD_TIMING && startup_frames != 512)
+            $fatal(1,"startup initialization frame count=%0d expected=512",startup_frames);
+        $display("STARTUP_READY t=%0t frames=%0d",$time,startup_frames);
+        capture_commands = 1;
         if (!dut.core_init) $fatal(1,"power-on reset incomplete");
+        if (dut.rx_gate != 0 || dut.tx_gate != 0 ||
+            dut.rx_pulse_mode != 0 || dut.tx_pulse_mode != 0 ||
+            rx_r_o != 0 || tx_t_o != 0 ||
+            rx_csb_o !== 8'hFF || tx_csb_o !== 8'hFF ||
+            rx_ldb_o !== 8'hFF || tx_ldb_o !== 8'hFF)
+            $fatal(1,"power-on RF safety state failed");
         if (!dut.flash_probe_done || dut.flash_jedec_id !== MOCK_ID)
             $fatal(1,"U22 JEDEC probe failed: %h",dut.flash_jedec_id);
         reset_edges = 0;
@@ -206,7 +286,7 @@ module tb_protocol_v03_top;
 
         payload = 0;
         exchange(8'hE0,8'hFF,0,payload,8'h00,15);
-        if (response[8] != 1 || response[9][1] != 1 ||
+        if (response[8] != 3 || response[9][1] != 1 ||
             response[10][1] != 1 || response[11] != 1 || response[12] != 0)
             $fatal(1,"status bytes wrong init=%h rx=%h tx=%h",
                    response[8],response[11],response[12]);
@@ -235,8 +315,61 @@ module tb_protocol_v03_top;
                    dut.pulse_tx_active,dut.pulse_rx_active,dut.target_reset_busy);
 
         payload = 0;
+        payload[0*8 +: 8] = 8'h06; // 1600 in 10 MHz units
+        payload[1*8 +: 8] = 8'h40;
+        payload[2*8 +: 8] = 8'h0B; // azimuth 30.00 degrees
+        payload[3*8 +: 8] = 8'hB8;
+        payload[4*8 +: 8] = 8'h05; // elevation 15.00 degrees
+        payload[5*8 +: 8] = 8'hDC;
+        payload[8*8 +: 8] = 8'h02;
+        exchange(8'h20,0,10,payload,8'h00,10);
+        if (frame_count != 9 || line7_frame_count != 5 || load_count != 6 ||
+            captured_frame[4] !== 24'h20000F ||
+            captured_line7[0] !== 24'h20000F ||
+            captured_frame[5] !== 24'h22003A ||
+            dut.channel_rx_enable !== 8'hFF ||
+            // Photo: chip0 at right. DXF mid4: RF4,RF3,RF1,RF2 left-to-right.
+            // chip0/RF1 x=62.4mm; RF2 x=72mm; chip3/RF4 x=-72mm.
+            dut.beam_phase[0 +: 6] !== 6'd59 ||
+            dut.beam_phase[6 +: 6] !== 6'd44 ||
+            dut.beam_phase[2*6 +: 6] !== 6'd11 ||
+            dut.beam_phase[3*6 +: 6] !== 6'd27 ||
+            dut.beam_phase[127*6 +: 6] !== 6'd20)
+            $fatal(1,"20 full-array batch failed frames=%0d loads=%0d f4=%h f5=%h en=%h",
+                   frame_count,load_count,captured_frame[4],captured_frame[5],dut.channel_rx_enable);
+        payload = 0;
+        payload[0*8 +: 8] = 8'h81; // lines 0 and 7
+        payload[1*8 +: 8] = 8'h04; // chip 2
+        payload[2*8 +: 8] = 8'h02; // channel 1
+        payload[3*8 +: 8] = 8'h06;
+        payload[4*8 +: 8] = 8'h40;
+        payload[5*8 +: 8] = 8'hF4; // azimuth -30.00 degrees
+        payload[6*8 +: 8] = 8'h48;
+        payload[7*8 +: 8] = 8'h05;
+        payload[8*8 +: 8] = 8'hDC;
+        payload[9*8 +: 8] = 8'h02;
+        exchange(8'hA0,0,10,payload,8'h00,10);
+        if (frame_count != 14 || line7_frame_count != 10 || load_count != 10 ||
+            captured_frame[9] !== 24'h200002 ||
+            captured_line7[5] !== 24'h200002 ||
+            dut.channel_rx_enable !== 8'h81 ||
+            dut.u_channel.enable_mem_q[0 +: 128] !== (128'h1 << 9 | 128'h1 << 121) ||
+            dut.beam_phase[9*6 +: 6] !== 6'd26 ||
+            dut.beam_phase[121*6 +: 6] !== 6'd22)
+            $fatal(1,"A0 Cartesian selection failed frames=%0d loads=%0d f9=%h en=%h",
+                   frame_count,load_count,captured_frame[9],dut.channel_rx_enable);
+        payload[3*8 +: 8] = 0;
+        payload[4*8 +: 8] = 0;
+        exchange(8'hA0,0,10,payload,8'h03,10);
+        payload = 0;
+        payload[0*8 +: 8] = 8'h06;
+        payload[1*8 +: 8] = 8'h40;
+        payload[6*8 +: 8] = 1;
+        frames_before_reject = frame_count;
+        loads_before_reject = load_count;
         exchange(8'h20,0,10,payload,8'h05,10);
-        exchange(8'hA0,0,10,payload,8'h05,10);
+        if (frame_count != frames_before_reject || load_count != loads_before_reject)
+            $fatal(1,"unsupported mode changed RF frames or LDB");
         exchange(8'hD0,0,2,payload,8'h05,10); // removed command
 
         // F1/F2 use the BJN110 byte positions inside a V0.3 envelope.
@@ -287,10 +420,14 @@ module tb_protocol_v03_top;
 
         payload = 0;
         payload[0 +: 8] = 1;
+        capture_commands = 0; // full reinitialization is not a command capture
         exchange(8'h00,0,2,payload,0,10);
         if (reset_edges != 128 || rx_r_o[0] != 0 || tx_rstn_o[0] != 1)
             $fatal(1,"target reset mismatch edges=%0d",reset_edges);
 
+        wait (dut.core_init === 1'b1);
+        repeat (20) @(negedge sys_clk_i);
+        capture_commands = 1;
         payload = 0;
         payload[1*8 +: 8] = 2;
         payload[2*8 +: 8] = 1;
@@ -301,13 +438,107 @@ module tb_protocol_v03_top;
         payload = 0;
         send_request(8'hE0,8'hFF,0,payload,1);
         repeat (30) @(posedge sys_clk_i);
-        if (rs422_tx_o !== 1'b1) $fatal(1,"bad checksum caused response");
+        if (debug_tx_o !== 1'b1) $fatal(1,"bad checksum caused response");
         exchange(8'hE0,8'hFF,0,payload,0,15);
-        $display("TB_V03_PASS 40 C0 00 E0 20 A0 F1 F2 F3 F5 removed-D0 checksum");
+        use_spare = 1;
+        exchange(8'hE0,8'hFF,0,payload,0,15);
+        use_spare = 0;
+        if (rs422_tx_o !== 1'b1) $fatal(1,"reserved RS422 transmitted data");
+        payload = 0;
+        payload[1*8 +: 8] = 2; // chip CID 2
+        payload[2*8 +: 8] = 4; // control register
+        payload[3*8 +: 8] = 12;
+        frames_before_reject = frame_count;
+        exchange(8'h41,0,4,payload,0,15);
+        if (frame_count != frames_before_reject + 2 ||
+            captured_frame[frames_before_reject] !== 24'h2C0C00 ||
+            captured_frame[frames_before_reject+1] !== 24'h280000 ||
+            response[8] !== 0 || response[9] !== 2 ||
+            response[10] !== 8'h08 || response[11] !== 8'h0C ||
+            response[12] !== 8'h2C)
+            $fatal(1,"41 SDO pipeline read mismatch");
+        mock_sdo = 24'h2A17C0;
+        payload[2*8 +: 8] = 2;
+        payload[3*8 +: 8] = 1;
+        frames_before_reject = frame_count;
+        exchange(8'h41,0,4,payload,0,15);
+        if (captured_frame[frames_before_reject] !== 24'h2A1000 ||
+            response[10] !== 8'hC0 || response[11] !== 8'h17 || response[12] !== 8'h2A)
+            $fatal(1,"41 dynamic RX read mismatch");
+        payload[2*8 +: 8] = 4;
+        payload[3*8 +: 8] = 12;
+        mock_sdo = 24'hFFFFFF;
+        exchange(8'h41,0,4,payload,8'h06,10);
+        payload = 0;
+        payload[1*8 +: 8] = 2;
+        payload[2*8 +: 8] = 8'h22;
+        payload[3*8 +: 8] = 8'h00;
+        payload[4*8 +: 8] = 8'h40;
+        frames_before_reject = frame_count;
+        loads_before_reject = load_count;
+        exchange(8'h42,0,5,payload,0,10);
+        if (frame_count != frames_before_reject + 1 ||
+            captured_frame[frames_before_reject] !== 24'h220040 ||
+            load_count != loads_before_reject)
+            $fatal(1,"diagnostic write unexpectedly loaded or wrong frame");
+        payload[2*8 +: 8] = 8'h32;
+        exchange(8'h42,0,5,payload,8'h03,10);
+        payload = 0;
+        exchange(8'h43,0,1,payload,0,10);
+        if (load_count != loads_before_reject + 1 || frame_count != frames_before_reject + 1)
+            $fatal(1,"diagnostic load issued wrong operation");
+        $display("TB_V03_PASS dual-RS485 41-SDO 40 C0 00 E0 20 A0 F1 F2 F3 F5 removed-D0 checksum");
         $finish;
     end
     initial begin
-        #80_000_000;
+        #500_000_000;
         $fatal(1,"timeout");
+    end
+endmodule
+
+// Check generated FPGA pin timing; this is not a chip functional model.
+module tb_s53_pin_timing(input wire sclk, csb, ldb, rstn);
+    realtime previous_rise = 0, last_fall = 0, cs_rise = 0, load_fall = 0;
+    integer edges = 0, post_edges = 0;
+    bit frame_seen = 0, frame_active = 0, load_active = 0;
+    always @(negedge csb) if (rstn === 1'b1) begin
+        if (frame_seen && post_edges < 2) $fatal(1,"%m missing post-frame clocks");
+        frame_active = 1;
+        edges = 0;
+        previous_rise = 0;
+    end
+    always @(posedge sclk) if (rstn === 1'b1) begin
+        if (csb === 1'b0 && frame_active) begin
+            if (edges > 0 && $realtime - previous_rise != 200.0)
+                $fatal(1,"%m SPI period is not 200ns");
+            previous_rise = $realtime;
+            edges = edges + 1;
+        end else if (frame_seen) post_edges = post_edges + 1;
+    end
+    always @(negedge sclk) if (frame_active && csb === 1'b0) begin
+        if ($realtime - previous_rise != 100.0)
+            $fatal(1,"%m SPI high time is not 100ns");
+        last_fall = $realtime;
+    end
+    always @(posedge csb) if (frame_active) begin
+        if (edges != 24) $fatal(1,"%m SPI frame does not have 24 clocks: %0d",edges);
+        if ($realtime - last_fall != 100.0)
+            $fatal(1,"%m final CS hold is not 100ns");
+        cs_rise = $realtime;
+        post_edges = 0;
+        frame_seen = 1;
+        frame_active = 0;
+    end
+    always @(negedge ldb) if (rstn === 1'b1) begin
+        if (csb !== 1'b1 || post_edges < 2 || $realtime - cs_rise < 200.0)
+            $fatal(1,"%m LDB guard/post clocks invalid");
+        load_fall = $realtime;
+        load_active = 1;
+        $display("BOARD_LDB %m t=%0t CS_to_LDB_ns=%0.0f",$time,$realtime-cs_rise);
+    end
+    always @(posedge ldb) if (load_active) begin
+        if ($realtime - load_fall != 100.0)
+            $fatal(1,"%m LDB low time is not 100ns");
+        load_active = 0;
     end
 endmodule

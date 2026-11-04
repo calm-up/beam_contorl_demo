@@ -1,0 +1,997 @@
+
+*** Running vivado
+    with args -log beam_ctrl_top.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source beam_ctrl_top.tcl
+
+
+
+****** Vivado v2022.2 (64-bit)
+  **** SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source beam_ctrl_top.tcl -notrace
+Command: read_checkpoint -auto_incremental -incremental D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/beam110_pipelined/beam_control_v03.srcs/utils_1/imports/synth_1/beam_ctrl_top.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/beam110_pipelined/beam_control_v03.srcs/utils_1/imports/synth_1/beam_ctrl_top.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+Command: synth_design -top beam_ctrl_top -part xc7a200tfbg484-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a200t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a200t'
+INFO: [Device 21-403] Loading part xc7a200tfbg484-1
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 246628
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [D:/Vivado/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+WARNING: [Synth 8-9400] empty statement in sequential block [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/tri_fun.v:137]
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:06 . Memory (MB): peak = 1277.344 ; gain = 409.805
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'beam_ctrl_top' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_ctrl_top.sv:4]
+INFO: [Synth 8-6157] synthesizing module 'u22_flash_probe' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_probe.sv:5]
+INFO: [Synth 8-6155] done synthesizing module 'u22_flash_probe' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_probe.sv:5]
+INFO: [Synth 8-6157] synthesizing module 'u22_flash_device' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_device.sv:6]
+INFO: [Synth 8-6155] done synthesizing module 'u22_flash_device' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_device.sv:6]
+INFO: [Synth 8-6157] synthesizing module 'u22_flash_record_service' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_record_service.sv:7]
+INFO: [Synth 8-226] default block is never used [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_record_service.sv:142]
+INFO: [Synth 8-6155] done synthesizing module 'u22_flash_record_service' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_record_service.sv:7]
+INFO: [Synth 8-6157] synthesizing module 'u22_spi_master' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_spi_master.sv:6]
+INFO: [Synth 8-226] default block is never used [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_spi_master.sv:51]
+INFO: [Synth 8-6155] done synthesizing module 'u22_spi_master' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_spi_master.sv:6]
+INFO: [Synth 8-6157] synthesizing module 'uart_rx' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/uart_rx.sv:6]
+	Parameter CLK_HZ bound to: 32'b00000010111110101111000010000000 
+	Parameter BAUD_RATE bound to: 32'b00000000000000011100001000000000 
+INFO: [Synth 8-226] default block is never used [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/uart_rx.sv:51]
+INFO: [Synth 8-6155] done synthesizing module 'uart_rx' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/uart_rx.sv:6]
+INFO: [Synth 8-6157] synthesizing module 'protocol_v03_parser' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/protocol_v03_parser.sv:5]
+INFO: [Synth 8-6155] done synthesizing module 'protocol_v03_parser' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/protocol_v03_parser.sv:5]
+INFO: [Synth 8-6157] synthesizing module 'beam_phase_calc' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_phase_calc.sv:6]
+INFO: [Synth 8-6157] synthesizing module 'tri_fun' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/tri_fun.v:1]
+INFO: [Synth 8-6157] synthesizing module 'tri_ram' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_phase_rom.sv:5]
+INFO: [Synth 8-3876] $readmem data file 'tri.mem' is read successfully [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_phase_rom.sv:12]
+INFO: [Synth 8-6155] done synthesizing module 'tri_ram' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_phase_rom.sv:5]
+INFO: [Synth 8-6155] done synthesizing module 'tri_fun' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/reference/bjn110_cal_phase/tri_fun.v:1]
+INFO: [Synth 8-6157] synthesizing module 'beam_formula_calc' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_formula_calc.sv:6]
+	Parameter X_DIS bound to: 32'sb00000000000000000000000010100111 
+	Parameter Y_DIS bound to: 32'sb00000000000000000000000010100111 
+INFO: [Synth 8-6155] done synthesizing module 'beam_formula_calc' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_formula_calc.sv:6]
+INFO: [Synth 8-226] default block is never used [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_phase_calc.sv:84]
+INFO: [Synth 8-6155] done synthesizing module 'beam_phase_calc' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_phase_calc.sv:6]
+INFO: [Synth 8-6157] synthesizing module 'channel_executor' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/channel_executor.sv:8]
+	Parameter CID_MAP bound to: 16'b0011001000010000 
+INFO: [Synth 8-6155] done synthesizing module 'channel_executor' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/channel_executor.sv:8]
+INFO: [Synth 8-6157] synthesizing module 'array_target_reset' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_target_reset.sv:5]
+	Parameter HALF_PERIOD_CYCLES bound to: 32'b00000000000000000000000000000101 
+	Parameter RESET_CLOCKS bound to: 32'b00000000000000000000000010000000 
+	Parameter POST_CYCLES bound to: 32'b00000000000000000000000000001010 
+INFO: [Synth 8-6155] done synthesizing module 'array_target_reset' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_target_reset.sv:5]
+INFO: [Synth 8-6157] synthesizing module 'protocol_v03_response' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/protocol_v03_response.sv:4]
+	Parameter CLK_HZ bound to: 32'b00000010111110101111000010000000 
+	Parameter BAUD_RATE bound to: 32'b00000000000000011100001000000000 
+INFO: [Synth 8-6157] synthesizing module 'uart_tx_byte' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/uart_tx_byte.sv:4]
+	Parameter CLK_HZ bound to: 32'b00000010111110101111000010000000 
+	Parameter BAUD_RATE bound to: 32'b00000000000000011100001000000000 
+INFO: [Synth 8-226] default block is never used [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/uart_tx_byte.sv:35]
+INFO: [Synth 8-6155] done synthesizing module 'uart_tx_byte' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/uart_tx_byte.sv:4]
+INFO: [Synth 8-6155] done synthesizing module 'protocol_v03_response' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/protocol_v03_response.sv:4]
+INFO: [Synth 8-6157] synthesizing module 'pulse_gate_110' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/pulse_gate_110.sv:5]
+INFO: [Synth 8-6155] done synthesizing module 'pulse_gate_110' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/pulse_gate_110.sv:5]
+INFO: [Synth 8-6157] synthesizing module 'protocol_v03_dispatcher' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/protocol_v03_dispatcher.sv:4]
+INFO: [Synth 8-6155] done synthesizing module 'protocol_v03_dispatcher' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/protocol_v03_dispatcher.sv:4]
+INFO: [Synth 8-6157] synthesizing module 'beam_ctrl_core' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_ctrl_core.sv:5]
+	Parameter SERIAL_HALF_PERIOD_CYCLES bound to: 32'b00000000000000000000000000000101 
+	Parameter POST_FRAME_CLOCKS bound to: 32'b00000000000000000000000000000010 
+	Parameter RESET_CLK_CYCLES bound to: 32'b00000000000000000000000010000000 
+	Parameter POST_RESET_CYCLES bound to: 32'b00000000000000000000000000001010 
+	Parameter CSB_TO_LDB_CYCLES bound to: 32'b00000000000000000000000000001010 
+	Parameter LDB_LOW_CYCLES bound to: 32'b00000000000000000000000000000101 
+INFO: [Synth 8-6157] synthesizing module 'array_reset_ctrl' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_reset_ctrl.sv:7]
+	Parameter SERIAL_HALF_PERIOD_CYCLES bound to: 32'b00000000000000000000000000000101 
+	Parameter RESET_CLK_CYCLES bound to: 32'b00000000000000000000000010000000 
+	Parameter POST_RESET_CYCLES bound to: 32'b00000000000000000000000000001010 
+INFO: [Synth 8-226] default block is never used [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_reset_ctrl.sv:61]
+INFO: [Synth 8-6155] done synthesizing module 'array_reset_ctrl' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_reset_ctrl.sv:7]
+INFO: [Synth 8-6157] synthesizing module 'array_write_engine' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_write_engine.sv:7]
+	Parameter SERIAL_HALF_PERIOD_CYCLES bound to: 32'b00000000000000000000000000000101 
+	Parameter POST_FRAME_CLOCKS bound to: 32'b00000000000000000000000000000010 
+INFO: [Synth 8-6155] done synthesizing module 'array_write_engine' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_write_engine.sv:7]
+INFO: [Synth 8-6157] synthesizing module 'array_load_ctrl' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_load_ctrl.sv:6]
+	Parameter CSB_TO_LDB_CYCLES bound to: 32'b00000000000000000000000000001010 
+	Parameter LDB_LOW_CYCLES bound to: 32'b00000000000000000000000000000101 
+INFO: [Synth 8-6155] done synthesizing module 'array_load_ctrl' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_load_ctrl.sv:6]
+INFO: [Synth 8-6157] synthesizing module 'array_output_router' [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_output_router.sv:6]
+INFO: [Synth 8-6155] done synthesizing module 'array_output_router' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/array_output_router.sv:6]
+INFO: [Synth 8-6155] done synthesizing module 'beam_ctrl_core' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_ctrl_core.sv:5]
+INFO: [Synth 8-6155] done synthesizing module 'beam_ctrl_top' (0#1) [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/beam_ctrl_top.sv:4]
+WARNING: [Synth 8-6014] Unused sequential element clear_base_q_reg was removed.  [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/rtl/u22_flash_record_service.sv:131]
+WARNING: [Synth 8-6014] Unused sequential element cache_valid_reg was removed. 
+WARNING: [Synth 8-3917] design beam_ctrl_top has port debug_rs485_tx_o driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port debug_rs485_dir_o driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port spare_rs485_tx_o driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port spare_rs485_dir_o driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port u22_wp_n_o driven by constant 1
+WARNING: [Synth 8-3917] design beam_ctrl_top has port u22_hold_n_o driven by constant 1
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[7] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[6] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[5] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[4] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[3] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[2] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[1] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[0] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[7] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[6] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[5] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[4] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[3] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[2] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[1] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[0] driven by constant 0
+WARNING: [Synth 8-7129] Port payload_i[447] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[446] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[445] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[444] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[443] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[442] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[441] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[440] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[439] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[438] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[437] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[436] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[435] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[434] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[433] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[432] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[431] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[430] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[429] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[428] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[427] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[426] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[425] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[424] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[423] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[422] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[421] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[420] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[419] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[418] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[417] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[416] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[415] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[414] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[413] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[412] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[411] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[410] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[409] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[408] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[407] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[406] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[405] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[404] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[403] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[402] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[401] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[400] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[399] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[398] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[397] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[396] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[395] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[394] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[393] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[392] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[391] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[390] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[389] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[388] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[387] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[386] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[385] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[384] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[383] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[382] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[381] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[380] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[379] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[378] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[377] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[376] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[375] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[374] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[373] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[372] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[371] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[370] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[369] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[368] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[367] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[366] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[365] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[364] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[363] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[362] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[361] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[360] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[359] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[358] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[357] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[356] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[355] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[354] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[353] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[352] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[351] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[350] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[349] in module protocol_v03_dispatcher is either unconnected or has no load
+WARNING: [Synth 8-7129] Port payload_i[348] in module protocol_v03_dispatcher is either unconnected or has no load
+INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:10 . Memory (MB): peak = 1446.355 ; gain = 578.816
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:03 ; elapsed = 00:00:10 . Memory (MB): peak = 1446.355 ; gain = 578.816
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:03 ; elapsed = 00:00:10 . Memory (MB): peak = 1446.355 ; gain = 578.816
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.389 . Memory (MB): peak = 1446.355 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/constr/beam_ctrl.xdc]
+Finished Parsing XDC File [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/constr/beam_ctrl.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/constr/beam_ctrl.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/beam_ctrl_top_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/beam_ctrl_top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1577.629 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.077 . Memory (MB): peak = 1577.629 ; gain = 0.000
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [D:/Vivado/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:09 ; elapsed = 00:00:24 . Memory (MB): peak = 1577.629 ; gain = 710.090
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a200tfbg484-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:09 ; elapsed = 00:00:24 . Memory (MB): peak = 1577.629 ; gain = 710.090
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:09 ; elapsed = 00:00:24 . Memory (MB): peak = 1577.629 ; gain = 710.090
+---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'u22_flash_probe'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'u22_flash_device'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'u22_spi_master'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'uart_rx'
+INFO: [Synth 8-802] inferred FSM for state register 'r_state_reg' in module 'tri_fun'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'beam_formula_calc'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'beam_phase_calc'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'channel_executor'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'array_target_reset'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'uart_tx_byte'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'protocol_v03_response'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'protocol_v03_dispatcher'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'array_reset_ctrl'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'array_write_engine'
+INFO: [Synth 8-802] inferred FSM for state register 'state_q_reg' in module 'array_load_ctrl'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+              WAIT_START |                             0001 |                               00
+               WAIT_BUSY |                             0010 |                               01
+               WAIT_DONE |                             0100 |                               10
+                  iSTATE |                             1000 |                               11
+*
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'one-hot' in module 'u22_flash_probe'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    IDLE |                            00001 |                              000
+                   ISSUE |                            00010 |                              001
+               WAIT_BUSY |                            00100 |                              010
+               WAIT_DONE |                            01000 |                              011
+                EVALUATE |                            10000 |                              100
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'one-hot' in module 'u22_flash_device'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    IDLE |                             0001 |                               00
+                   SETUP |                             0010 |                               01
+                     LOW |                             0100 |                               10
+                    HIGH |                             1000 |                               11
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'one-hot' in module 'u22_spi_master'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 ST_IDLE |                               00 |                               00
+                ST_START |                               01 |                               01
+                 ST_DATA |                               10 |                               10
+                 ST_STOP |                               11 |                               11
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'sequential' in module 'uart_rx'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                      S0 |                              000 |                         00000000
+                      S1 |                              001 |                         00000001
+                      S2 |                              010 |                         00000010
+                      S3 |                              011 |                         00000011
+                      S4 |                              100 |                         00000100
+                      S5 |                              101 |                         00000101
+                      S6 |                              110 |                         00000110
+                      S7 |                              111 |                         00000111
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'r_state_reg' using encoding 'sequential' in module 'tri_fun'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    IDLE |                              000 |                              000
+                    MUL2 |                              001 |                              001
+                    MUL3 |                              010 |                              010
+                DIV_INIT |                              011 |                              011
+                 DIV_RUN |                              100 |                              100
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'sequential' in module 'beam_formula_calc'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 ST_IDLE |                               00 |                               00
+                  ST_TRI |                               01 |                               01
+              ST_FORMULA |                               10 |                               10
+               ST_POINTS |                               11 |                               11
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'sequential' in module 'beam_phase_calc'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 ST_IDLE |                      00000010000 |                             0000
+    ST_BATCH_SEND_ENABLE |                      00000001000 |                             0101
+    ST_BATCH_WAIT_ENABLE |                      10000000000 |                             0110
+        ST_BATCH_SEND_AP |                      00010000000 |                             0111
+        ST_BATCH_WAIT_AP |                      00100000000 |                             1000
+      ST_BATCH_SEND_LOAD |                      01000000000 |                             1001
+      ST_BATCH_WAIT_LOAD |                      00001000000 |                             1010
+           ST_SEND_WRITE |                      00000000100 |                             0001
+           ST_WAIT_WRITE |                      00000100000 |                             0010
+            ST_SEND_LOAD |                      00000000001 |                             0011
+            ST_WAIT_LOAD |                      00000000010 |                             0100
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'one-hot' in module 'channel_executor'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    IDLE |                              001 |                               00
+                   CLOCK |                              010 |                               01
+                    POST |                              100 |                               10
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'one-hot' in module 'array_target_reset'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    IDLE |                               00 |                               00
+                   START |                               01 |                               01
+                    DATA |                               10 |                               10
+                    STOP |                               11 |                               11
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'sequential' in module 'uart_tx_byte'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    IDLE |                              001 |                               00
+                   ISSUE |                              010 |                               01
+               WAIT_BYTE |                              100 |                               10
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'one-hot' in module 'protocol_v03_response'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    IDLE |                             0110 |                             0000
+             RESET_ISSUE |                             0000 |                             0011
+              RESET_WAIT |                             0001 |                             0100
+                   CLEAR |                             0010 |                             0101
+           CHANNEL_ISSUE |                             1010 |                             0001
+            CHANNEL_WAIT |                             0011 |                             0010
+         BEAM_CALC_ISSUE |                             1001 |                             1010
+          BEAM_CALC_WAIT |                             0111 |                             1011
+        BEAM_BATCH_ISSUE |                             1000 |                             1100
+         BEAM_BATCH_WAIT |                             0101 |                             1101
+             FLASH_ISSUE |                             1011 |                             0110
+              FLASH_WAIT |                             1101 |                             0111
+          RESPONSE_ISSUE |                             0100 |                             1000
+           RESPONSE_WAIT |                             1100 |                             1001
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'sequential' in module 'protocol_v03_dispatcher'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 ST_HOLD |                               00 |                               00
+                ST_CLOCK |                               01 |                               01
+                 ST_POST |                               10 |                               10
+                ST_READY |                               11 |                               11
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'sequential' in module 'array_reset_ctrl'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 ST_IDLE |                              001 |                               00
+                ST_SHIFT |                              100 |                               01
+                 ST_POST |                              010 |                               10
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'one-hot' in module 'array_write_engine'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 ST_IDLE |                              001 |                               00
+                ST_GUARD |                              010 |                               01
+                ST_PULSE |                              100 |                               10
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_q_reg' using encoding 'one-hot' in module 'array_load_ctrl'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:31 . Memory (MB): peak = 1577.629 ; gain = 710.090
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   67 Bit       Adders := 2     
+	   2 Input   61 Bit       Adders := 2     
+	   3 Input   46 Bit       Adders := 1     
+	   2 Input   32 Bit       Adders := 7     
+	   3 Input   32 Bit       Adders := 3     
+	   2 Input   24 Bit       Adders := 1     
+	   2 Input   22 Bit       Adders := 1     
+	   2 Input   20 Bit       Adders := 1     
+	   2 Input   17 Bit       Adders := 1     
+	   2 Input   14 Bit       Adders := 6     
+	   2 Input   11 Bit       Adders := 4     
+	   2 Input   10 Bit       Adders := 2     
+	   2 Input    9 Bit       Adders := 3     
+	   2 Input    8 Bit       Adders := 6     
+	  10 Input    8 Bit       Adders := 1     
+	  12 Input    8 Bit       Adders := 2     
+	   2 Input    7 Bit       Adders := 6     
+	   2 Input    6 Bit       Adders := 3     
+	   2 Input    5 Bit       Adders := 3     
+	   2 Input    4 Bit       Adders := 5     
+	   2 Input    3 Bit       Adders := 9     
+	   2 Input    2 Bit       Adders := 5     
++---XORs : 
+	   2 Input      8 Bit         XORs := 15    
+	   2 Input      1 Bit         XORs := 1     
++---XORs : 
+	               18 Bit    Wide XORs := 1     
++---Registers : 
+	              768 Bit    Registers := 2     
+	              448 Bit    Registers := 1     
+	              256 Bit    Registers := 3     
+	              128 Bit    Registers := 5     
+	               96 Bit    Registers := 2     
+	               67 Bit    Registers := 6     
+	               61 Bit    Registers := 4     
+	               53 Bit    Registers := 2     
+	               48 Bit    Registers := 2     
+	               44 Bit    Registers := 1     
+	               40 Bit    Registers := 2     
+	               24 Bit    Registers := 3     
+	               22 Bit    Registers := 4     
+	               20 Bit    Registers := 1     
+	               17 Bit    Registers := 1     
+	               16 Bit    Registers := 7     
+	               14 Bit    Registers := 3     
+	               11 Bit    Registers := 3     
+	               10 Bit    Registers := 2     
+	                9 Bit    Registers := 2     
+	                8 Bit    Registers := 34    
+	                7 Bit    Registers := 7     
+	                6 Bit    Registers := 7     
+	                5 Bit    Registers := 5     
+	                4 Bit    Registers := 10    
+	                3 Bit    Registers := 14    
+	                2 Bit    Registers := 13    
+	                1 Bit    Registers := 47    
++---Multipliers : 
+	              16x55  Multipliers := 2     
+	               9x44  Multipliers := 2     
+	               8x46  Multipliers := 2     
++---RAMs : 
+	             200K Bit	(1602 X 128 bit)          RAMs := 1     
++---Muxes : 
+	  11 Input  768 Bit        Muxes := 1     
+	   2 Input  768 Bit        Muxes := 7     
+	   4 Input  768 Bit        Muxes := 1     
+	   2 Input  448 Bit        Muxes := 5     
+	   4 Input  448 Bit        Muxes := 2     
+	  11 Input  256 Bit        Muxes := 2     
+	   2 Input  256 Bit        Muxes := 31    
+	   4 Input  256 Bit        Muxes := 2     
+	   5 Input  256 Bit        Muxes := 1     
+	   4 Input  128 Bit        Muxes := 1     
+	   2 Input  128 Bit        Muxes := 1     
+	   5 Input  128 Bit        Muxes := 1     
+	   2 Input   67 Bit        Muxes := 2     
+	   5 Input   67 Bit        Muxes := 5     
+	   2 Input   61 Bit        Muxes := 2     
+	  14 Input   40 Bit        Muxes := 1     
+	   2 Input   32 Bit        Muxes := 2     
+	   2 Input   24 Bit        Muxes := 7     
+	   8 Input   24 Bit        Muxes := 1     
+	   2 Input   22 Bit        Muxes := 2     
+	   2 Input   21 Bit        Muxes := 1     
+	   2 Input   20 Bit        Muxes := 2     
+	   5 Input   17 Bit        Muxes := 1     
+	   7 Input   16 Bit        Muxes := 2     
+	   2 Input   16 Bit        Muxes := 5     
+	   2 Input   14 Bit        Muxes := 8     
+	   8 Input   14 Bit        Muxes := 1     
+	   5 Input   14 Bit        Muxes := 2     
+	  51 Input   11 Bit        Muxes := 1     
+	   8 Input   11 Bit        Muxes := 2     
+	   2 Input   10 Bit        Muxes := 4     
+	   8 Input   10 Bit        Muxes := 1     
+	   4 Input   10 Bit        Muxes := 1     
+	   2 Input    9 Bit        Muxes := 3     
+	   4 Input    9 Bit        Muxes := 2     
+	   2 Input    8 Bit        Muxes := 73    
+	   3 Input    8 Bit        Muxes := 5     
+	   4 Input    8 Bit        Muxes := 4     
+	  14 Input    8 Bit        Muxes := 5     
+	   4 Input    7 Bit        Muxes := 3     
+	   5 Input    7 Bit        Muxes := 1     
+	   3 Input    7 Bit        Muxes := 1     
+	   4 Input    6 Bit        Muxes := 33    
+	   2 Input    6 Bit        Muxes := 6     
+	   5 Input    6 Bit        Muxes := 1     
+	   3 Input    5 Bit        Muxes := 5     
+	   2 Input    5 Bit        Muxes := 12    
+	   4 Input    5 Bit        Muxes := 1     
+	   5 Input    5 Bit        Muxes := 3     
+	   6 Input    5 Bit        Muxes := 1     
+	   2 Input    4 Bit        Muxes := 11    
+	   4 Input    4 Bit        Muxes := 4     
+	   3 Input    4 Bit        Muxes := 4     
+	  14 Input    4 Bit        Muxes := 1     
+	  20 Input    4 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 16    
+	   4 Input    3 Bit        Muxes := 5     
+	   3 Input    3 Bit        Muxes := 8     
+	   8 Input    3 Bit        Muxes := 4     
+	   5 Input    3 Bit        Muxes := 2     
+	   6 Input    3 Bit        Muxes := 5     
+	   2 Input    2 Bit        Muxes := 22    
+	  11 Input    2 Bit        Muxes := 1     
+	   4 Input    2 Bit        Muxes := 5     
+	   3 Input    2 Bit        Muxes := 2     
+	   8 Input    2 Bit        Muxes := 1     
+	  11 Input    1 Bit        Muxes := 11    
+	   2 Input    1 Bit        Muxes := 456   
+	   4 Input    1 Bit        Muxes := 38    
+	   3 Input    1 Bit        Muxes := 41    
+	   8 Input    1 Bit        Muxes := 20    
+	   5 Input    1 Bit        Muxes := 19    
+	   6 Input    1 Bit        Muxes := 9     
+	  14 Input    1 Bit        Muxes := 16    
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 740 (col length:100)
+BRAMs: 730 (col length: RAMB18 100 RAMB36 50)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+DSP Report: Generating DSP right3_q_reg, operation Mode is: (A2*B2)'.
+DSP Report: register frequency_q_reg is absorbed into DSP right3_q_reg.
+DSP Report: register right3_q_reg is absorbed into DSP right3_q_reg.
+DSP Report: register right3_q_reg is absorbed into DSP right3_q_reg.
+DSP Report: operator right3_q0 is absorbed into DSP right3_q_reg.
+DSP Report: operator right3_q0 is absorbed into DSP right3_q_reg.
+DSP Report: Generating DSP right3_q0, operation Mode is: A2*B2.
+DSP Report: register right3_q0 is absorbed into DSP right3_q0.
+DSP Report: register frequency_q_reg is absorbed into DSP right3_q0.
+DSP Report: operator right3_q0 is absorbed into DSP right3_q0.
+DSP Report: operator right3_q0 is absorbed into DSP right3_q0.
+DSP Report: Generating DSP right3_q_reg, operation Mode is: (PCIN>>17)+A2*B2.
+DSP Report: register right3_q_reg is absorbed into DSP right3_q_reg.
+DSP Report: register frequency_q_reg is absorbed into DSP right3_q_reg.
+DSP Report: register right3_q_reg is absorbed into DSP right3_q_reg.
+DSP Report: operator right3_q0 is absorbed into DSP right3_q_reg.
+DSP Report: operator right3_q0 is absorbed into DSP right3_q_reg.
+DSP Report: Generating DSP left1_q0, operation Mode is: A*B.
+DSP Report: operator left1_q0 is absorbed into DSP left1_q0.
+DSP Report: operator left1_q0 is absorbed into DSP left1_q0.
+DSP Report: Generating DSP left3_q_reg, operation Mode is: (A2*B2)'.
+DSP Report: register frequency_q_reg is absorbed into DSP left3_q_reg.
+DSP Report: register left3_q_reg is absorbed into DSP left3_q_reg.
+DSP Report: register left3_q_reg is absorbed into DSP left3_q_reg.
+DSP Report: operator left3_q0 is absorbed into DSP left3_q_reg.
+DSP Report: operator left3_q0 is absorbed into DSP left3_q_reg.
+DSP Report: Generating DSP left3_q0, operation Mode is: A2*B2.
+DSP Report: register left3_q0 is absorbed into DSP left3_q0.
+DSP Report: register frequency_q_reg is absorbed into DSP left3_q0.
+DSP Report: operator left3_q0 is absorbed into DSP left3_q0.
+DSP Report: operator left3_q0 is absorbed into DSP left3_q0.
+DSP Report: Generating DSP left3_q_reg, operation Mode is: (PCIN>>17)+A2*B2.
+DSP Report: register left3_q_reg is absorbed into DSP left3_q_reg.
+DSP Report: register frequency_q_reg is absorbed into DSP left3_q_reg.
+DSP Report: register left3_q_reg is absorbed into DSP left3_q_reg.
+DSP Report: operator left3_q0 is absorbed into DSP left3_q_reg.
+DSP Report: operator left3_q0 is absorbed into DSP left3_q_reg.
+DSP Report: Generating DSP phase_codes_o3, operation Mode is: A2*B.
+DSP Report: register phase_codes_o3 is absorbed into DSP phase_codes_o3.
+DSP Report: operator phase_codes_o3 is absorbed into DSP phase_codes_o3.
+DSP Report: operator phase_codes_o3 is absorbed into DSP phase_codes_o3.
+DSP Report: Generating DSP phase_codes_o3, operation Mode is: A2*B.
+DSP Report: register phase_codes_o3 is absorbed into DSP phase_codes_o3.
+DSP Report: operator phase_codes_o3 is absorbed into DSP phase_codes_o3.
+DSP Report: operator phase_codes_o3 is absorbed into DSP phase_codes_o3.
+DSP Report: Generating DSP phase_codes_o3, operation Mode is: (PCIN>>17)+A2*B.
+DSP Report: register phase_codes_o3 is absorbed into DSP phase_codes_o3.
+DSP Report: operator phase_codes_o3 is absorbed into DSP phase_codes_o3.
+DSP Report: operator phase_codes_o3 is absorbed into DSP phase_codes_o3.
+DSP Report: Generating DSP phase_codes_o4, operation Mode is: A2*B.
+DSP Report: register phase_codes_o4 is absorbed into DSP phase_codes_o4.
+DSP Report: operator phase_codes_o4 is absorbed into DSP phase_codes_o4.
+DSP Report: operator phase_codes_o4 is absorbed into DSP phase_codes_o4.
+DSP Report: Generating DSP phase_codes_o4, operation Mode is: A2*B.
+DSP Report: register phase_codes_o4 is absorbed into DSP phase_codes_o4.
+DSP Report: operator phase_codes_o4 is absorbed into DSP phase_codes_o4.
+DSP Report: operator phase_codes_o4 is absorbed into DSP phase_codes_o4.
+DSP Report: Generating DSP phase_codes_o4, operation Mode is: (PCIN>>17)+A2*B.
+DSP Report: register phase_codes_o4 is absorbed into DSP phase_codes_o4.
+DSP Report: operator phase_codes_o4 is absorbed into DSP phase_codes_o4.
+DSP Report: operator phase_codes_o4 is absorbed into DSP phase_codes_o4.
+WARNING: [Synth 8-3917] design beam_ctrl_top has port debug_rs485_tx_o driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port debug_rs485_dir_o driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port spare_rs485_tx_o driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port spare_rs485_dir_o driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port u22_wp_n_o driven by constant 1
+WARNING: [Synth 8-3917] design beam_ctrl_top has port u22_hold_n_o driven by constant 1
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[7] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[6] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[5] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[4] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[3] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[2] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[1] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port rx_t_o[0] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[7] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[6] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[5] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[4] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[3] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[2] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[1] driven by constant 0
+WARNING: [Synth 8-3917] design beam_ctrl_top has port tx_r_o[0] driven by constant 0
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[47]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[46]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[45]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[44]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[43]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[42]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[41]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[40]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[39]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[38]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[37]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[36]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[35]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[34]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[33]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[32]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[31]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[30]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[29]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[28]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[27]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[26]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[25]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[24]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[23]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[22]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[21]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[20]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[19]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[18]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (right3_q_reg[17]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[47]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[46]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[45]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[44]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[43]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[42]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[41]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[40]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[39]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[38]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[37]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[36]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[35]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[34]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[33]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[32]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[31]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[30]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[29]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[28]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[27]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[26]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[25]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[24]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[23]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[22]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[21]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[20]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[19]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[18]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left1_q_reg[17]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[47]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[46]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[45]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[44]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[43]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[42]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[41]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[40]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[39]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[38]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[37]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[36]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[35]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[34]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[33]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[32]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[31]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[30]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[29]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[28]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[27]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[26]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[25]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[24]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[23]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[22]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[21]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[20]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[19]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[18]) is unused and will be removed from module beam_formula_calc.
+WARNING: [Synth 8-3332] Sequential element (left3_q_reg[17]) is unused and will be removed from module beam_formula_calc.
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:00 ; elapsed = 00:02:38 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+ROM: Preliminary Mapping Report
++------------+------------+---------------+----------------+
+|Module Name | RTL Object | Depth x Width | Implemented As | 
++------------+------------+---------------+----------------+
+|tri_ram     | data       | 16384x21      | LUT            | 
+|tri_ram     | p_0_out    | 16384x21      | LUT            | 
++------------+------------+---------------+----------------+
+
+
+Block RAM: Preliminary Mapping Report (see note below)
++--------------------+----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name         | RTL Object     | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++--------------------+----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|i_1/u_flash_records | cache_data_reg | 1 K x 128(READ_FIRST)  | W |   | 1 K x 128(WRITE_FIRST) |   | R | Port A and B     | 1      | 7      | 
++--------------------+----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
+
+DSP: Preliminary Mapping Report (see note below. The ' indicates corresponding REG is set)
++------------------+------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name       | DSP Mapping      | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++------------------+------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|beam_formula_calc | (A2*B2)'         | 19     | 16     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 1    | 0    | 
+|beam_formula_calc | A2*B2            | 18     | 16     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 0    | 
+|beam_formula_calc | (PCIN>>17)+A2*B2 | 18     | 16     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 1    | 
+|beam_formula_calc | A*B              | 22     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_formula_calc | (A2*B2)'         | 19     | 16     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 1    | 0    | 
+|beam_formula_calc | A2*B2            | 18     | 16     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 0    | 
+|beam_formula_calc | (PCIN>>17)+A2*B2 | 18     | 16     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 1    | 
+|beam_phase_calc   | A2*B             | 12     | 8      | -      | -      | 48     | 1    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_phase_calc   | A2*B             | 18     | 8      | -      | -      | 48     | 1    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_phase_calc   | (PCIN>>17)+A2*B  | 18     | 8      | -      | -      | 48     | 1    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_phase_calc   | A2*B             | 12     | 8      | -      | -      | 48     | 1    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_phase_calc   | A2*B             | 18     | 8      | -      | -      | 48     | 1    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_phase_calc   | (PCIN>>17)+A2*B  | 18     | 8      | -      | -      | 48     | 1    | 0    | -    | -    | -     | 0    | 0    | 
++------------------+------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:04 ; elapsed = 00:02:49 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:01:07 ; elapsed = 00:02:57 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Final Mapping Report
++--------------------+----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name         | RTL Object     | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++--------------------+----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|i_1/u_flash_records | cache_data_reg | 1 K x 128(READ_FIRST)  | W |   | 1 K x 128(WRITE_FIRST) |   | R | Port A and B     | 1      | 7      | 
++--------------------+----------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+INFO: [Synth 8-7052] The timing for the instance u_flash_records/cache_data_reg_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_flash_records/cache_data_reg_1 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_flash_records/cache_data_reg_2 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_flash_records/cache_data_reg_3 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_flash_records/cache_data_reg_4 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_flash_records/cache_data_reg_5 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_flash_records/cache_data_reg_6 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_flash_records/cache_data_reg_7 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:01:11 ; elapsed = 00:03:06 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:01:12 ; elapsed = 00:03:12 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:12 ; elapsed = 00:03:12 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:13 ; elapsed = 00:03:15 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:13 ; elapsed = 00:03:15 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:14 ; elapsed = 00:03:17 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:14 ; elapsed = 00:03:17 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+DSP Final Report (the ' indicates corresponding REG is set)
++------------------+--------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name       | DSP Mapping        | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++------------------+--------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|beam_phase_calc   | A''*B              | 30     | 18     | -      | -      | 48     | 2    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_phase_calc   | A''*B              | 17     | 18     | -      | -      | 48     | 2    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_phase_calc   | PCIN>>17+A''*B     | 17     | 18     | -      | -      | 48     | 2    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_phase_calc   | A''*B              | 30     | 18     | -      | -      | 48     | 2    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_phase_calc   | A''*B              | 17     | 18     | -      | -      | 48     | 2    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_phase_calc   | PCIN>>17+A''*B     | 17     | 18     | -      | -      | 48     | 2    | 0    | -    | -    | -     | 0    | 0    | 
+|beam_formula_calc | (A'*B'')'          | 30     | 18     | -      | -      | 48     | 1    | 2    | -    | -    | -     | 0    | 1    | 
+|beam_formula_calc | A'*B''             | 0      | 18     | -      | -      | 48     | 1    | 2    | -    | -    | -     | 0    | 0    | 
+|beam_formula_calc | (PCIN>>17+A'*B'')' | 17     | 18     | -      | -      | 48     | 1    | 2    | -    | -    | -     | 0    | 1    | 
+|beam_formula_calc | A'*B'              | 21     | 17     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 0    | 
+|beam_formula_calc | (A'*B'')'          | 30     | 18     | -      | -      | 48     | 1    | 2    | -    | -    | -     | 0    | 1    | 
+|beam_formula_calc | A'*B''             | 17     | 18     | -      | -      | 48     | 1    | 2    | -    | -    | -     | 0    | 0    | 
+|beam_formula_calc | (PCIN>>17+A'*B'')' | 17     | 18     | -      | -      | 48     | 1    | 2    | -    | -    | -     | 0    | 1    | 
++------------------+--------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+---------+------+
+|      |Cell     |Count |
++------+---------+------+
+|1     |BUFG     |     1|
+|2     |CARRY4   |   325|
+|3     |DSP48E1  |    13|
+|8     |LUT1     |   281|
+|9     |LUT2     |   778|
+|10    |LUT3     |  1285|
+|11    |LUT4     |  1424|
+|12    |LUT5     |  2019|
+|13    |LUT6     |  6296|
+|14    |MUXF7    |   824|
+|15    |MUXF8    |    76|
+|16    |RAMB18E1 |     1|
+|17    |RAMB36E1 |     7|
+|18    |FDRE     |  5954|
+|19    |FDSE     |    25|
+|20    |IBUF     |    21|
+|21    |OBUF     |   170|
++------+---------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:14 ; elapsed = 00:03:17 . Memory (MB): peak = 1778.473 ; gain = 910.934
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 116 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:01:08 ; elapsed = 00:03:10 . Memory (MB): peak = 1778.473 ; gain = 779.660
+Synthesis Optimization Complete : Time (s): cpu = 00:01:14 ; elapsed = 00:03:17 . Memory (MB): peak = 1778.473 ; gain = 910.934
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.237 . Memory (MB): peak = 1778.473 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 1246 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1778.473 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete, checksum: d31e595a
+INFO: [Common 17-83] Releasing license: Synthesis
+113 Infos, 241 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:01:18 ; elapsed = 00:03:27 . Memory (MB): peak = 1778.473 ; gain = 1342.980
+INFO: [Common 17-1381] The checkpoint 'D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/beam110_pipelined/beam_control_v03.runs/synth_1/beam_ctrl_top.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file beam_ctrl_top_utilization_synth.rpt -pb beam_ctrl_top_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Mon Oct 26 23:43:36 2026...

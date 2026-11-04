@@ -1,0 +1,152 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
+| Date         : Fri Oct 23 16:47:39 2026
+| Host         : LAPTOP-MU049O3G running 64-bit major release  (build 9200)
+| Command      : report_control_sets -verbose -file beam_ctrl_top_control_sets_placed.rpt
+| Design       : beam_ctrl_top
+| Device       : xc7a200t
+------------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |    74 |
+|    Minimum number of control sets                        |    74 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |   155 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |    74 |
+| >= 0 to < 4        |     0 |
+| >= 4 to < 6        |    12 |
+| >= 6 to < 8        |     6 |
+| >= 8 to < 10       |    29 |
+| >= 10 to < 12      |     6 |
+| >= 12 to < 14      |     1 |
+| >= 14 to < 16      |     0 |
+| >= 16              |    20 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |               9 |            5 |
+| No           | No                    | Yes                    |               0 |            0 |
+| No           | Yes                   | No                     |             558 |          226 |
+| Yes          | No                    | No                     |               0 |            0 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |            2926 |          804 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++----------------------+------------------------------------------------+------------------------------------+------------------+----------------+--------------+
+|     Clock Signal     |                  Enable Signal                 |          Set/Reset Signal          | Slice Load Count | Bel Load Count | Bels / Slice |
++----------------------+------------------------------------------------+------------------------------------+------------------+----------------+--------------+
+|  sys_clk_i_IBUF_BUFG | u_response/u_byte/E[0]                         | u_channel/rst                      |                1 |              4 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_dispatcher/FSM_sequential_state_q[3]_i_1_n_0 | u_channel/rst                      |                3 |              4 |         1.33 |
+|  sys_clk_i_IBUF_BUFG | u_core/u_tx_load/guard_count_q                 | u_core/u_reset/SR[0]               |                1 |              4 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_core/u_reset/post_count_q[3]_i_1_n_0         | u_channel/rst                      |                1 |              4 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_target_reset/post_q[3]_i_1_n_0               | u_channel/rst                      |                1 |              4 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_core/u_rx_load/guard_count_q                 | u_core/u_reset/SR[0]               |                1 |              4 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_flash_probe/FSM_onehot_state_q[3]_i_1__1_n_0 | u_channel/rst                      |                1 |              4 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_flash_spi/FSM_onehot_state_q[3]_i_1__0_n_0   | u_channel/rst                      |                1 |              4 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_flash_spi/div_q                              | u_channel/rst                      |                2 |              5 |         2.50 |
+|  sys_clk_i_IBUF_BUFG | u_core/u_tx_write/bit_index_q                  | u_core/u_reset/SR[0]               |                3 |              5 |         1.67 |
+|  sys_clk_i_IBUF_BUFG | u_flash_records/E[0]                           | u_channel/rst                      |                2 |              5 |         2.50 |
+|  sys_clk_i_IBUF_BUFG | u_core/u_rx_write/bit_index_q                  | u_core/u_reset/SR[0]               |                3 |              5 |         1.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/index_q[5]_i_2_n_0                    | u_parser/index_q[5]_i_1_n_0        |                2 |              6 |         3.00 |
+|  sys_clk_i_IBUF_BUFG | u_flash_records/clear_count_q[9]_i_1_n_0       | u_channel/rst                      |                1 |              6 |         6.00 |
+|  sys_clk_i_IBUF_BUFG | u_target_reset/cycles_q[6]_i_1_n_0             | u_channel/rst                      |                2 |              7 |         3.50 |
+|  sys_clk_i_IBUF_BUFG | u_core/u_reset/reset_count_q                   | u_channel/rst                      |                2 |              7 |         3.50 |
+|  sys_clk_i_IBUF_BUFG | u_core/u_rx_load/E[0]                          | u_channel/rst                      |                2 |              7 |         3.50 |
+|  sys_clk_i_IBUF_BUFG | u_flash_spi/byte_q                             | u_channel/rst                      |                2 |              7 |         3.50 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[7]_i_1_n_0                  | u_channel/rst                      |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[95]_i_1_n_0                 | u_channel/rst                      |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/received_sum_q                        | u_channel/rst                      |                2 |              8 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[79]_i_1_n_0                 | u_channel/rst                      |                2 |              8 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_core/u_rx_write/line_mask_q                  | u_core/u_reset/SR[0]               |                4 |              8 |         2.00 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[63]_i_1_n_0                 | u_channel/rst                      |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/sum_q[7]_i_1_n_0                      | u_channel/rst                      |                2 |              8 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_dispatcher/rx_pulse_q                        | u_channel/rst                      |                4 |              8 |         2.00 |
+|  sys_clk_i_IBUF_BUFG | u_channel/line_mask_q_0                        | u_core/u_reset/SR[0]               |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_dispatcher/tx_pulse_q                        | u_channel/rst                      |                4 |              8 |         2.00 |
+|  sys_clk_i_IBUF_BUFG | u_core/u_tx_write/line_mask_q                  | u_core/u_reset/SR[0]               |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_uart_rx/data_valid_o_i_1_n_0                 | u_channel/rst                      |                2 |              8 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[55]_i_1_n_0                 | u_channel/rst                      |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_response/u_byte/shift_q_1                    | u_channel/rst                      |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/command_o[7]_i_1_n_0                  | u_channel/rst                      |                2 |              8 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_parser/array_o[7]_i_1_n_0                    | u_channel/rst                      |                2 |              8 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[111]_i_1_n_0                | u_channel/rst                      |                4 |              8 |         2.00 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[103]_i_1_n_0                | u_channel/rst                      |                4 |              8 |         2.00 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[119]_i_1_n_0                | u_channel/rst                      |                4 |              8 |         2.00 |
+|  sys_clk_i_IBUF_BUFG | u_channel/line_mask_q                          | u_core/u_reset/SR[0]               |                2 |              8 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[31]_i_1_n_0                 | u_channel/rst                      |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[39]_i_1_n_0                 | u_channel/rst                      |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[15]_i_1_n_0                 | u_channel/rst                      |                2 |              8 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[23]_i_1_n_0                 | u_channel/rst                      |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[47]_i_1_n_0                 | u_channel/rst                      |                3 |              8 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[71]_i_1_n_0                 | u_channel/rst                      |                4 |              8 |         2.00 |
+|  sys_clk_i_IBUF_BUFG | u_parser/payload_o[87]_i_1_n_0                 | u_channel/rst                      |                2 |              8 |         4.00 |
+|  sys_clk_i_IBUF_BUFG |                                                |                                    |                5 |              9 |         1.80 |
+|  sys_clk_i_IBUF_BUFG | u_response/u_byte/count_q_0                    | u_channel/rst                      |                4 |              9 |         2.25 |
+|  sys_clk_i_IBUF_BUFG | u_dispatcher/reset_lines_q_reg[3]_0            | u_channel/rst                      |                6 |             10 |         1.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/FSM_sequential_state_q_reg[1][0]      | u_channel/rst                      |                4 |             10 |         2.50 |
+|  sys_clk_i_IBUF_BUFG | u_flash_records/iteration_q[9]_i_1_n_0         | u_channel/rst                      |                5 |             10 |         2.00 |
+|  sys_clk_i_IBUF_BUFG | u_flash_records/clear_index_q[10]_i_1_n_0      | u_channel/rst                      |                5 |             11 |         2.20 |
+|  sys_clk_i_IBUF_BUFG | u_flash_records/loaded_count_o[10]_i_1_n_0     | u_channel/rst                      |                3 |             11 |         3.67 |
+|  sys_clk_i_IBUF_BUFG | u_flash_records/last_valid_index_q[10]_i_1_n_0 | u_channel/rst                      |                3 |             11 |         3.67 |
+|  sys_clk_i_IBUF_BUFG | u_parser/length_q                              | u_channel/rst                      |                5 |             13 |         2.60 |
+|  sys_clk_i_IBUF_BUFG |                                                | u_tx_pulse_gate/cycle_q[0]_i_1_n_0 |                4 |             16 |         4.00 |
+|  sys_clk_i_IBUF_BUFG |                                                | u_dispatcher/por_done_q_reg        |                4 |             16 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_flash_device/poll_count_q[16]_i_1_n_0        | u_channel/rst                      |                4 |             17 |         4.25 |
+|  sys_clk_i_IBUF_BUFG | u_parser/index_q12_in                          | u_uart_rx/SR[0]                    |                5 |             20 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_flash_probe/jedec_id_o[23]_i_1_n_0           | u_channel/rst                      |                6 |             24 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_flash_records/cache_sample_o[23]_i_1_n_0     | u_channel/rst                      |                9 |             24 |         2.67 |
+|  sys_clk_i_IBUF_BUFG | u_dispatcher/array_q                           | u_channel/rst                      |               11 |             27 |         2.45 |
+|  sys_clk_i_IBUF_BUFG | u_parser/E[0]                                  | u_channel/rst                      |               12 |             29 |         2.42 |
+|  sys_clk_i_IBUF_BUFG |                                                | u_core/u_reset/SR[0]               |               12 |             34 |         2.83 |
+|  sys_clk_i_IBUF_BUFG | u_dispatcher/response_extra_q[39]_i_1_n_0      | u_channel/rst                      |               10 |             36 |         3.60 |
+|  sys_clk_i_IBUF_BUFG | u_dispatcher/length_q                          | u_channel/rst                      |               17 |             64 |         3.76 |
+|  sys_clk_i_IBUF_BUFG | u_dispatcher/command_q                         | u_channel/rst                      |               28 |            112 |         4.00 |
+|  sys_clk_i_IBUF_BUFG | u_flash_records/cmd_q[7]_i_1_n_0               | u_channel/rst                      |               30 |            123 |         4.10 |
+|  sys_clk_i_IBUF_BUFG | u_flash_device/read_data_o[127]_i_1_n_0        | u_channel/rst                      |               38 |            128 |         3.37 |
+|  sys_clk_i_IBUF_BUFG | u_flash_records/op_q                           | u_channel/rst                      |               48 |            131 |         2.73 |
+|  sys_clk_i_IBUF_BUFG | u_flash_device/tx_count_q                      | u_channel/rst                      |               43 |            141 |         3.28 |
+|  sys_clk_i_IBUF_BUFG |                                                | u_channel/rst                      |              206 |            492 |         2.39 |
+|  sys_clk_i_IBUF_BUFG | u_channel/frames_q__0                          | u_core/u_reset/SR[0]               |              130 |            552 |         4.25 |
+|  sys_clk_i_IBUF_BUFG | u_channel/frames_q__0_1                        | u_core/u_reset/SR[0]               |              128 |            552 |         4.31 |
+|  sys_clk_i_IBUF_BUFG | u_channel/frames_q                             | u_channel/rst                      |              140 |            553 |         3.95 |
++----------------------+------------------------------------------------+------------------------------------+------------------+----------------+--------------+
+
+

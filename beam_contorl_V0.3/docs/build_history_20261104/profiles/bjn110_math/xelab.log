@@ -1,0 +1,21 @@
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: D:/Vivado/Vivado/2022.2/bin/unwrapped/win64.o/xelab.exe tb_bjn110_math -s bjn110_math -timescale 1ns/1ps 
+Multi-threading is on. Using 30 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.tri_ram
+Compiling module work.tri_fun
+Compiling module work.group_gen
+Compiling module work.fuxing_fs
+Compiling module work.fuxing_js
+Compiling module work.wave_veight
+Compiling module work.cal_formula(X_DIS=167,Y_DIS=167)
+Compiling module work.cal_axi
+Compiling module work.cal_phase(X_DIS=167,Y_DIS=167,GR...
+Compiling module work.tb_bjn110_math
+Built simulation snapshot bjn110_math

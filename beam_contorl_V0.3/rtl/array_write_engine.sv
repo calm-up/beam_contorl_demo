@@ -13,6 +13,8 @@ module array_write_engine #(
     input  logic                          start_i,
     input  logic [LINE_COUNT-1:0]         line_mask_i,
     input  logic [ARRAY_FRAME_BITS-1:0]   frames_i,
+    input  logic [LINE_COUNT-1:0]         sdo_i,
+    output logic [LINE_COUNT*FRAME_BITS-1:0] sdo_last_o,
 
     output logic                          ready_o,
     output logic                          busy_o,
@@ -30,6 +32,7 @@ module array_write_engine #(
     typedef enum logic [1:0] {
         ST_IDLE,
         ST_SHIFT,
+        ST_FINAL,
         ST_POST
     } state_t;
 
@@ -53,7 +56,8 @@ module array_write_engine #(
     assign ready_o      = (state_q == ST_IDLE);
     assign busy_o       = (state_q != ST_IDLE);
     assign serial_clk_o = {LINE_COUNT{serial_clk_q}} & line_mask_q;
-    assign csb_o        = (state_q == ST_SHIFT) ? ~line_mask_q : {LINE_COUNT{1'b1}};
+    assign csb_o        = ((state_q == ST_SHIFT) || (state_q == ST_FINAL)) ?
+                          ~line_mask_q : {LINE_COUNT{1'b1}};
 
     genvar line_index;
     genvar chip_index;
@@ -84,6 +88,7 @@ module array_write_engine #(
             serial_clk_q   <= 1'b0;
             line_mask_q    <= '0;
             frames_q       <= '0;
+            sdo_last_o    <= '0;
             write_done_o   <= 1'b0;
         end else begin
             write_done_o <= 1'b0;
@@ -108,16 +113,40 @@ module array_write_engine #(
                         if (!serial_clk_q) begin
                             // Rising edge: the selected chips sample current SDI.
                             serial_clk_q <= 1'b1;
+                            // The chip presents each SDO bit after the SCLK
+                            // falling edge. At this rising edge we see the
+                            // previous bit; the final bit arrives as CSB rises.
+                            for (int line = 0; line < LINE_COUNT; line++)
+                                if (state_q == ST_SHIFT && line_mask_q[line])
+                                    sdo_last_o[line*FRAME_BITS +: FRAME_BITS] <=
+                                        {sdo_last_o[line*FRAME_BITS +: FRAME_BITS-1],
+                                         sdo_i[line]};
                         end else begin
                             // Falling edge: advance data for the next sample.
                             serial_clk_q <= 1'b0;
                             if (bit_index_q == 0) begin
                                 post_count_q <= '0;
-                                state_q      <= ST_POST;
+                                state_q      <= ST_FINAL;
                             end else begin
                                 bit_index_q <= bit_index_q - 1'b1;
                             end
                         end
+                    end else begin
+                        div_count_q <= div_count_q + 1'b1;
+                    end
+                end
+
+                ST_FINAL: begin
+                    // Hold CSB low and SCLK low while the final SDO bit settles.
+                    // Capture it before releasing CSB, then issue post clocks.
+                    if (div_count_q == SERIAL_HALF_PERIOD_CYCLES - 1) begin
+                        for (int line = 0; line < LINE_COUNT; line++)
+                            if (line_mask_q[line])
+                                sdo_last_o[line*FRAME_BITS +: FRAME_BITS] <=
+                                    {sdo_last_o[line*FRAME_BITS +: FRAME_BITS-1],
+                                     sdo_i[line]};
+                        div_count_q <= '0;
+                        state_q <= ST_POST;
                     end else begin
                         div_count_q <= div_count_q + 1'b1;
                     end

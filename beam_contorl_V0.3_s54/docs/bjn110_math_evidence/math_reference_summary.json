@@ -1,0 +1,37 @@
+{
+  "cases": 184,
+  "groups_per_case": 32,
+  "channels_per_group": 32,
+  "phase_values_per_direction": 188416,
+  "trig_cases": 18001,
+  "trig_rom_entries": 9001,
+  "trig_rom_max_error_lsb": 0.49996256560552865,
+  "fixed_vs_float_different_codes": 2,
+  "fixed_vs_float_max_circular_code_error": 1,
+  "fixed_vs_float_examples": [
+    {
+      "frequency": 1365,
+      "azimuth": -5056,
+      "elevation": -6285,
+      "row": 7,
+      "column": 2,
+      "fixed": 55,
+      "ideal": 54
+    },
+    {
+      "frequency": 1365,
+      "azimuth": -5056,
+      "elevation": -6285,
+      "row": 24,
+      "column": 29,
+      "fixed": 9,
+      "ideal": 10
+    }
+  ],
+  "source_parameters": {
+    "X_DIS": 167,
+    "Y_DIS": 167,
+    "GROUP": 32
+  },
+  "note": "Reference convention only; not an assertion of current array geometry."
+}

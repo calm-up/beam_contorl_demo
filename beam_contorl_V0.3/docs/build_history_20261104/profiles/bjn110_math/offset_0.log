@@ -1,0 +1,22 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Fri Oct 23 14:45:27 2026
+# Process ID: 168416
+# Current directory: D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/bjn110_math
+# Command line: xsim.exe -log offset_0.log -mode tcl -source {xsim.dir/bjn110_math/xsim_script.tcl}
+# Log file: D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/bjn110_math/offset_0.log
+# Journal file: D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/build/bjn110_math\xsim.jou
+# Running On: LAPTOP-MU049O3G, OS: Windows, CPU Frequency: 2419 MHz, CPU Physical cores: 24, Host memory: 16890 MB
+#-----------------------------------------------------------
+source xsim.dir/bjn110_math/xsim_script.tcl
+# xsim {bjn110_math} -testplusarg SLOW_OFFSET_0 -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+TRIG_RESULT cases=18001 errors=0
+BJN110_RESULT offset=0 cases=184 samples=5888 data_errors=0 tag_errors=0 trig_errors=0
+BJN110_NUMERIC_PASS
+$finish called at time : 5076010 ns : File "D:/beam_control/beam_control_demo/beam_contorl_demo/beam_contorl_V0.3/sim/bjn110_algorithm/tb_bjn110_math.sv" Line 108
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct 23 14:45:30 2026...
