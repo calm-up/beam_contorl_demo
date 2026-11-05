@@ -67,10 +67,10 @@ module beam_ctrl_core #(
     logic internal_ready;
 
     // Control_Reg E column, addresses 0..127, low byte first.
-    // 10405W_12_18_HP_SPI裸片详测码表_20261028.xlsx SHA256:
-    // 659e0427fb36250f1c5c5ff83925f6c472e6faaaf318335cf45cf3d9b0010266
+    // CCAR10405L_D01_SPI码表_20260420.xlsx SHA256:
+    // c2c8c27fe945aa0570c39924ef57d55017345aa877d8a8e50dc7540bf4b6c68e
     localparam logic [1023:0] CONTROL_DEFAULTS = {
-        256'h00000000000000000000005F0000000000000007070F0F0F11050F0F0F0F0200,
+        256'h00000000000000000000005F000000000000000F0F0F0F0F11050F0F0F0F0200,
         256'h0001010203030101020201010101010100000000000000000004040404040404,
         256'h0404040400000000000000000004040404040404040404040000000000000000,
         256'h0004040404040404040404040000000000000000000404040404040404040404
@@ -94,11 +94,12 @@ module beam_ctrl_core #(
                 data_byte = CONTROL_DEFAULTS[index[6:0]*8 +: 8];
                 chip_init_frame = {cid, 4'b0100, address, data_byte};
             end else if (index < 10'd256) begin
-                // TXPS addresses 0..127; two bytes per state, high byte first.
+                // TXPS: codebook B..Q gives {2'b0, state[5:0], 8'b0}.
+                // Addresses 0..127; two bytes per state, high byte first.
                 address = index[7:0] - 8'd128;
                 ps_state = (index - 10'd128) >> 1;
-                if (!index[0]) data_byte = {4'b0, ps_state[5:2]};
-                else           data_byte = {ps_state[1:0], 6'b0};
+                if (!index[0]) data_byte = {2'b0, ps_state};
+                else           data_byte = 8'b0;
                 chip_init_frame = {cid, 4'b0101, address, data_byte};
             end else if (index < 10'd320) begin
                 // TXATT addresses 0..63.
@@ -106,11 +107,11 @@ module beam_ctrl_core #(
                 chip_init_frame = {cid, 4'b0110, att_address,
                                    2'b00, att_address, 2'b00};
             end else if (index < 10'd448) begin
-                // RXPS addresses 128..255; two bytes per state.
+                // RXPS uses the same codebook word; addresses 128..255.
                 address = 8'd128 + (index - 10'd320);
                 ps_state = (index - 10'd320) >> 1;
-                if (!index[0]) data_byte = {4'b0, ps_state[5:2]};
-                else           data_byte = {ps_state[1:0], 6'b0};
+                if (!index[0]) data_byte = {2'b0, ps_state};
+                else           data_byte = 8'b0;
                 chip_init_frame = {cid, 4'b0101, address, data_byte};
             end else begin
                 // RXATT addresses 0..63.
