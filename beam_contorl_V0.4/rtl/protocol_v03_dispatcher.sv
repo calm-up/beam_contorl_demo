@@ -5,6 +5,8 @@ module protocol_v03_dispatcher (
     input  logic         clk_i,
     input  logic         rst_i,
     input  logic         frame_valid_i,
+    input  logic         enable_config_allowed_i,
+    output logic         channel_enable_only_o,
     input  logic         frame_error_i,
     input  logic [7:0]   command_i,
     input  logic [7:0]   array_i,
@@ -153,6 +155,20 @@ module protocol_v03_dispatcher (
                     array_i != 2 && array_i != 8'hFF)) status_result = 8'h03;
                 else status_result = 8'h00;
             end
+            8'h47: begin
+                if (array_i > 1 || payload_len_i != 4 || p[0] > 7 ||
+                    p[1] > 3 || p[2] > 3 || p[3] > 1) status_result = 8'h03;
+                else if (!init_done_i || init_fault_i) status_result = 8'h06;
+                else if (!enable_config_allowed_i || !core_ready_i || channel_busy_i)
+                    status_result = 8'h04;
+                else status_result = 8'h00;
+            end
+            8'h46: begin
+                if (array_i > 1 || payload_len_i != 1 ||
+                    (p[0] != 8'hFF && p[0] != 8'h00)) status_result = 8'h03;
+                else if (!init_done_i || init_fault_i) status_result = 8'h06;
+                else status_result = 8'h00;
+            end
             8'h41: begin
                 if (array_i > 1 || payload_len_i != 4 || p[0] > 7 ||
                     p[1] > 3 || p[2] == 0 || p[2] == 3 || p[2] > 7 ||
@@ -245,6 +261,7 @@ module protocol_v03_dispatcher (
     end
 
     assign channel_start_o = state_q == CHANNEL_ISSUE;
+    assign channel_enable_only_o = command_q == 8'h47;
     assign read_start_o = state_q == READ_ISSUE;
     assign read_array_o = read_array_q;
     assign read_line_o = read_line_q;
@@ -349,6 +366,10 @@ module protocol_v03_dispatcher (
                                          array_i == 1 ? 2'b10 : 2'b11;
                         reset_lines_q <= init_fault_i ? 8'hFF : p[0];
                         state_q <= RESET_ISSUE;
+                    end else if (command_i == 8'h46) begin
+                        if (array_i[0]) tx_pulse_q <= p[0];
+                        else rx_pulse_q <= p[0];
+                        state_q <= RESPONSE_ISSUE;
                     end else if (command_i == 8'h41) begin
                         read_array_q <= array_i[0];
                         read_line_q <= p[0][2:0];
@@ -356,7 +377,8 @@ module protocol_v03_dispatcher (
                         read_function_q <= p[2][2:0];
                         read_address_q <= p[3];
                         state_q <= READ_ISSUE;
-                    end else if (command_i == 8'h40 || command_i == 8'hC0) begin
+                    end else if (command_i == 8'h40 || command_i == 8'hC0 ||
+                                 command_i == 8'h47) begin
                         channel_array_q <= array_i[0];
                         channel_line_q <= p[0][2:0];
                         channel_chip_q <= p[1][1:0];
@@ -401,10 +423,10 @@ module protocol_v03_dispatcher (
                     end else if (channel_done_i) begin
                         if (channel_array_q) begin
                             tx_gate_q[channel_line_q] <= 1'b1;
-                            tx_pulse_q <= pending_pulse_q;
+                            if (!channel_enable_only_o) tx_pulse_q <= pending_pulse_q;
                         end else begin
                             rx_gate_q[channel_line_q] <= 1'b1;
-                            rx_pulse_q <= pending_pulse_q;
+                            if (!channel_enable_only_o) rx_pulse_q <= pending_pulse_q;
                         end
                         response_status_q <= 8'h00;
                         state_q <= RESPONSE_ISSUE;

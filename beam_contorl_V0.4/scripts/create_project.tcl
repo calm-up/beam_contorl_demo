@@ -1,6 +1,6 @@
 set root [file normalize [file join [file dirname [info script]] ..]]
 set debug_enabled 1
-set flavor s54
+set flavor v04
 set build_dir [file join $root build $flavor]
 file mkdir $build_dir
 create_project -force beam_control_v03 $build_dir -part xc7a200t-fbg484-1
@@ -15,24 +15,27 @@ set sources [list \
     pulse_gate_110.sv u22_spi_master.sv u22_flash_probe.sv u22_flash_device.sv \
     u22_flash_record_service.sv \
     protocol_v03_dispatcher.sv protocol_v03_rs485_port.sv \
-    chip_sdo_reader.sv beam_ctrl_top.sv]
+    chip_sdo_reader.sv sync_serial_phy.sv sync_ap_batch.sv beam_ctrl_top.sv]
 foreach source $sources {
     add_files -norecurse [file join $root rtl $source]
 }
 foreach source {tri_fun.v cal_formula.v} {
-    add_files -norecurse [file join $root reference bjn110_cal_phase $source]
+    set reference_file [file join $root reference bjn110_cal_phase $source]
+    add_files -norecurse $reference_file
+    set_property file_type SystemVerilog [get_files $reference_file]
 }
 add_files -norecurse [file join $root rtl rom tri.mem]
 set_property file_type SystemVerilog [get_files [file join $root rtl *.sv]]
 set_property top beam_ctrl_top [get_filesets sources_1]
 add_files -fileset constrs_1 -norecurse [file join $root constr beam_ctrl.xdc]
+add_files -fileset constrs_1 -norecurse [file join $root constr sync_board.xdc]
 add_files -fileset constrs_1 -norecurse [file join $root constr clock_route_impl.xdc]
 set_property USED_IN_SYNTHESIS false [get_files [file join $root constr clock_route_impl.xdc]]
 set_property target_constrs_file [file join $root constr beam_ctrl.xdc] [get_filesets constrs_1]
 if {$debug_enabled} {
     source [file join $root scripts create_debug_ila.tcl]
 }
-set generics [list LDB_LOW_CYCLES=5]
+set generics {}
 if {$debug_enabled} {lappend generics ENABLE_DEBUG_ILA=1}
 if {[llength $generics] > 0} {
     set_property generic $generics [get_filesets sources_1]
@@ -50,5 +53,20 @@ update_compile_order -fileset sources_1
 update_compile_order -fileset sim_1
 source [file join $root scripts setup_s54_periodic_sim.tcl]
 source [file join $root scripts setup_s54_continuous_sim.tcl]
-puts "V03_PROJECT_CREATED flavor=$flavor root=$root"
+create_fileset -simset sim_sync
+add_files -fileset sim_sync -norecurse [file join $root sim tb_sync_ap_batch.sv]
+set sync_sim [get_filesets sim_sync]
+set_property top tb_sync_ap_batch $sync_sim
+set_property top_auto_set false $sync_sim
+set_property xsim.simulate.runtime 0ns $sync_sim
+set_property xsim.elaborate.debug_level all $sync_sim
+foreach sim_set {sim_1 sim_sync sim_continuous} {
+    set_property -dict [list xsim.elaborate.xelab.more_options {-timescale 1ns/1ps}] [get_filesets $sim_set]
+}
+set sync_sim_dir [file join $build_dir beam_control_v03.sim sim_sync behav xsim rtl rom]
+file mkdir $sync_sim_dir
+file copy -force [file join $root rtl rom tri.mem] $sync_sim_dir
+update_compile_order -fileset sim_sync
+current_fileset -simset $sync_sim
+puts "V04_PROJECT_CREATED flavor=$flavor root=$root"
 close_project

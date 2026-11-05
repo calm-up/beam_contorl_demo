@@ -11,6 +11,7 @@ module channel_executor #(
     input  logic                        clk_i,
     input  logic                        rst_i,
     input  logic                        command_valid_i,
+    input  logic                        enable_only_i,
     input  logic                        command_error_i,
     input  logic                        clear_valid_i,
     input  logic [1:0]                  clear_array_i,
@@ -63,7 +64,7 @@ module channel_executor #(
     logic [1:0] chip_q, channel_q;
     logic enable_q;
     logic [5:0] phase_q, attenuation_q;
-    logic round_q;
+    logic round_q, enable_only_q;
     logic batch_mode_q;
     logic [1:0] batch_round_q;
     logic [767:0] batch_phase_q;
@@ -294,6 +295,7 @@ module channel_executor #(
                     phase_q       <= phase_i;
                     attenuation_q <= attenuation_i;
                     enable_q      <= enable_i;
+                    enable_only_q <= enable_only_i;
                     round_q       <= 1'b0;
                     frames_q      <= enable_frames_d;
                     accepted_count_o <= accepted_count_o + 1'b1;
@@ -327,7 +329,12 @@ module channel_executor #(
                         error_o <= 1'b1;
                         state_q <= ST_IDLE;
                     end else if (core_write_done_i) begin
-                        if (round_q) begin
+                        if (enable_only_q) begin
+                            enable_mem_q[{array_q, line_q, chip_q, channel_q}] <= enable_q;
+                            completed_count_o <= completed_count_o + 1'b1;
+                            done_o <= 1'b1;
+                            state_q <= ST_IDLE;
+                        end else if (round_q) begin
                             state_q <= ST_SEND_LOAD;
                         end else begin
                             round_q  <= 1'b1;

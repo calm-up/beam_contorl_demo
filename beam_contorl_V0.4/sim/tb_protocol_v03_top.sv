@@ -104,6 +104,8 @@ module tb_protocol_v03_top #(
     ) dut (
         .sys_clk_i(sys_clk_i), .rx_sdo_i({7'b0,sdo_bit_q}), .tx_sdo_i(8'b0),
         .rs422_rx_i(1'b1), .rs422_tx_o(rs422_tx_o),
+        .sync_clk_i(1'b0), .wavefront_i(1'b0), .beam_apply_i(1'b0),
+        .external_t_i(1'b0), .external_r_i(1'b0),
         .debug_rs485_rx_i(debug_rx_i), .debug_rs485_tx_o(debug_tx_o), .debug_rs485_dir_o(),
         .spare_rs485_rx_i(spare_rx_i), .spare_rs485_tx_o(spare_tx_o), .spare_rs485_dir_o(),
         .u22_cs_n_o(u22_cs_n), .u22_sck_o(u22_sck), .u22_mosi_o(u22_mosi),

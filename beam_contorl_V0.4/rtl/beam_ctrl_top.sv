@@ -13,13 +13,19 @@ module beam_ctrl_top #(
     parameter int unsigned RESET_CLK_CYCLES = 128,
     parameter int unsigned POST_RESET_CYCLES = 10,
     parameter int unsigned CSB_TO_LDB_CYCLES = 10,
-    parameter int unsigned LDB_LOW_CYCLES = 5
+    parameter int unsigned LDB_LOW_CYCLES = 6 * SERIAL_HALF_PERIOD_CYCLES,
+    parameter int unsigned SYNC_SETTLE_CYCLES = 50
 ) (
     input  wire        sys_clk_i,
     input  wire [7:0]  rx_sdo_i,
     input  wire [7:0]  tx_sdo_i,
     input  wire        rs422_rx_i,
     output wire        rs422_tx_o,
+    input  wire        sync_clk_i,
+    input  wire        wavefront_i,
+    input  wire        beam_apply_i,
+    input  wire        external_t_i,
+    input  wire        external_r_i,
     input  wire        debug_rs485_rx_i,
     output wire        debug_rs485_tx_o,
     output wire        debug_rs485_dir_o,
@@ -56,8 +62,14 @@ module beam_ctrl_top #(
         else por_count_q <= por_count_q + 1'b1;
     end
     wire rst = !por_done_q;
-    (* KEEP = "true" *) wire unused_inputs = rs422_rx_i;
-    assign rs422_tx_o = 1'b1;
+    wire sync_owns, sync_write, sync_load, sync_tr_hold, sync_apply_rejected;
+    wire channel_enable_only;
+    wire sync_enable_start;
+    wire [7:0] sync_enable_target;
+    wire [1:0] sync_external;
+    wire [1:0] sync_array, sync_applied;
+    wire [7:0] sync_lines;
+    wire [767:0] sync_frames;
 
     // U22 is independent of the U5 configuration Flash. Writes require the
     // exact expected JEDEC ID and are confined to the selected U22 half.
@@ -135,8 +147,8 @@ module beam_ctrl_top #(
     wire [447:0] port_payload [0:1];
     wire [5:0] port_rx_index [0:1];
     logic active_port_q;
-    wire select_debug = !dispatcher_busy && port_frame_valid[0];
-    wire select_spare = !dispatcher_busy && !port_frame_valid[0] && port_frame_valid[1];
+    wire select_debug = !sync_owns && !dispatcher_busy && port_frame_valid[0];
+    wire select_spare = !sync_owns && !dispatcher_busy && !port_frame_valid[0] && port_frame_valid[1];
     wire frame_valid, frame_error;
     wire [7:0] frame_error_status, frame_command, frame_array, payload_len;
     wire [447:0] frame_payload;
@@ -213,15 +225,19 @@ module beam_ctrl_top #(
         .phase_codes_o(beam_phase), .enable_bits_o(beam_enable)
     );
     channel_executor #(.CID_MAP(CHIP_CID_MAP)) u_channel (
-        .clk_i(sys_clk_i), .rst_i(rst), .command_valid_i(channel_start),
+        .clk_i(sys_clk_i), .rst_i(rst), .command_valid_i(channel_start || sync_enable_start),
+        .enable_only_i(channel_enable_only || sync_enable_start),
         .batch_valid_i(beam_batch_start), .batch_array_i(beam_array),
         .batch_phase_i(beam_phase), .batch_enable_i(beam_enable),
         .batch_done_o(beam_batch_done), .batch_error_o(beam_batch_error),
         .command_error_i(1'b0), .clear_valid_i(clear_valid),
         .clear_array_i(clear_array), .clear_lines_i(clear_lines),
-        .array_i(channel_array), .line_i(channel_line),
-        .chip_i(channel_chip), .channel_i(channel_index),
-        .enable_i(channel_enable), .phase_i(channel_phase),
+        .array_i(sync_enable_start ? sync_array[1] : channel_array),
+        .line_i(sync_enable_start ? sync_enable_target[7:5] : channel_line),
+        .chip_i(sync_enable_start ? sync_enable_target[4:3] : channel_chip),
+        .channel_i(sync_enable_start ? sync_enable_target[2:1] : channel_index),
+        .enable_i(sync_enable_start ? sync_enable_target[0] : channel_enable),
+        .phase_i(channel_phase),
         .attenuation_i(channel_atten), .core_init_done_i(core_init),
         .core_cmd_valid_o(channel_core_valid), .core_cmd_ready_i(core_ready),
         .core_array_sel_o(channel_core_array), .core_line_mask_o(channel_core_lines),
@@ -299,6 +315,41 @@ module beam_ctrl_top #(
     wire [7:0] rx_gate, tx_gate;
     wire [7:0] rx_pulse_mode, tx_pulse_mode;
     wire pulse_tx_active, pulse_rx_active;
+    wire external_tx_mode = sync_external[1] || tx_pulse_mode == 8'hFF;
+    wire external_rx_mode = sync_external[0] || rx_pulse_mode == 8'hFF;
+    wire external_mode = external_tx_mode || external_rx_mode;
+    (* ASYNC_REG = "TRUE" *) logic [1:0] external_t_q, external_r_q;
+    logic external_tx_active, external_rx_active;
+    logic [3:0] tr_guard_q;
+    always_ff @(posedge sys_clk_i) begin
+        if (rst) begin
+            external_t_q <= 0;
+            external_r_q <= 0;
+            external_tx_active <= 0;
+            external_rx_active <= 0;
+            tr_guard_q <= 0;
+        end else begin
+            external_t_q <= {external_t_q[0], external_t_i};
+            external_r_q <= {external_r_q[0], external_r_i};
+            if (external_tx_active || external_rx_active) begin
+                if (sync_tr_hold || !external_mode ||
+                    (external_tx_active && (!external_t_q[1] || external_r_q[1])) ||
+                    (external_rx_active && (!external_r_q[1] || external_t_q[1]))) begin
+                    external_tx_active <= 0;
+                    external_rx_active <= 0;
+                    tr_guard_q <= 10;
+                end
+            end else if (tr_guard_q != 0) tr_guard_q <= tr_guard_q - 1'b1;
+            else if (external_mode && !sync_tr_hold) begin
+                external_tx_active <= external_t_q[1] && !external_r_q[1];
+                external_rx_active <= external_r_q[1] && !external_t_q[1];
+            end
+        end
+    end
+    wire tx_window = external_mode ?
+        (external_tx_mode && sync_applied[1] && external_tx_active) : pulse_tx_active;
+    wire rx_window = external_mode ?
+        (external_rx_mode && sync_applied[0] && external_rx_active) : pulse_rx_active;
     pulse_gate_110 u_rx_pulse_gate (
         .clk_i(sys_clk_i), .rst_i(rst), .mode_i(rx_pulse_mode),
         .tx_active_o(), .rx_active_o(pulse_rx_active)
@@ -310,7 +361,10 @@ module beam_ctrl_top #(
     wire [3:0] dispatcher_state;
     protocol_v03_dispatcher u_dispatcher (
         .clk_i(sys_clk_i), .rst_i(rst), .frame_valid_i(frame_valid),
-        .frame_error_i(frame_error), .command_i(frame_command),
+        .enable_config_allowed_i(!tx_window && !rx_window &&
+                                 !external_t_q[1] && !external_r_q[1]),
+        .channel_enable_only_o(channel_enable_only),
+        .frame_error_i(frame_error || sync_apply_rejected), .command_i(frame_command),
         .array_i(frame_array), .payload_len_i(payload_len),
         .payload_i(frame_payload), .init_done_i(core_init),
         .chip_reset_done_i(core_reset_done), .init_fault_i(core_init_fault),
@@ -360,6 +414,28 @@ module beam_ctrl_top #(
     wire [31:0] core_rx_sdi, core_tx_sdi;
     wire [7:0] core_rx_clk, core_rx_csb, core_rx_ldb, core_rx_rstn;
     wire [7:0] core_tx_clk, core_tx_csb, core_tx_ldb, core_tx_rstn;
+    sync_ap_batch #(
+        .CID_MAP(CHIP_CID_MAP), .PRELOAD_GUARD(CSB_TO_LDB_CYCLES),
+        .SETTLE_CYCLES(SYNC_SETTLE_CYCLES)
+    ) u_sync (
+        .clk_i(sys_clk_i), .rst_i(rst), .sclk_i(sync_clk_i),
+        .wave_i(wavefront_i), .data_i(rs422_rx_i), .data_o(rs422_tx_o),
+        .apply_i(beam_apply_i),
+        .available_i(core_init && !core_init_fault && !dispatcher_busy &&
+                     !target_reset_busy && core_ready),
+        .core_ready_i(core_ready), .write_done_i(core_write_done),
+        .load_done_i(core_load_done), .core_error_i(core_error),
+        .tr_active_i(external_t_q[1] || external_r_q[1] ||
+                     tx_window || rx_window),
+        .invalidate_i(reset_start || (channel_start && !channel_enable_only) || beam_batch_start),
+        .enable_done_i(channel_done), .enable_error_i(channel_error),
+        .enable_start_o(sync_enable_start), .enable_target_o(sync_enable_target),
+        .external_configured_o(sync_external),
+        .owns_core_o(sync_owns), .write_o(sync_write), .load_o(sync_load),
+        .array_o(sync_array), .lines_o(sync_lines), .frames_o(sync_frames),
+        .applied_o(sync_applied), .tr_hold_o(sync_tr_hold),
+        .apply_rejected_o(sync_apply_rejected)
+    );
     beam_ctrl_core #(
         .ENABLE_CHIP_INIT(ENABLE_CHIP_INIT), .CID_MAP(CHIP_CID_MAP),
         .SERIAL_HALF_PERIOD_CYCLES(SERIAL_HALF_PERIOD_CYCLES),
@@ -372,14 +448,18 @@ module beam_ctrl_top #(
         .clk_i(sys_clk_i), .rst_i(rst),
         .reinit_start_i(target_reset_done),
         .reinit_array_i(active_reset_array), .reinit_lines_i(active_reset_lines),
-        .cmd_valid_i((channel_core_valid || read_core_valid) && !target_reset_busy),
+        .cmd_valid_i((sync_write || sync_load || channel_core_valid || read_core_valid) && !target_reset_busy),
         .cmd_ready_o(core_ready),
-        .cmd_array_sel_i(read_core_valid ? read_core_array : channel_core_array),
-        .cmd_line_mask_i(read_core_valid ? read_core_lines : channel_core_lines),
-        .cmd_rx_frames_i(read_core_valid ? read_core_frames : channel_rx_frames),
-        .cmd_tx_frames_i(read_core_valid ? read_core_frames : channel_tx_frames),
-        .cmd_write_i(read_core_valid || channel_core_write),
-        .cmd_load_i(!read_core_valid && channel_core_load),
+        .cmd_array_sel_i((sync_write || sync_load) ? sync_array :
+                         read_core_valid ? read_core_array : channel_core_array),
+        .cmd_line_mask_i((sync_write || sync_load) ? sync_lines :
+                         read_core_valid ? read_core_lines : channel_core_lines),
+        .cmd_rx_frames_i(sync_write ? sync_frames :
+                         read_core_valid ? read_core_frames : channel_rx_frames),
+        .cmd_tx_frames_i(sync_write ? sync_frames :
+                         read_core_valid ? read_core_frames : channel_tx_frames),
+        .cmd_write_i(sync_write || read_core_valid || channel_core_write),
+        .cmd_load_i(sync_load || (!read_core_valid && channel_core_load)),
         .busy_o(core_busy), .write_done_o(core_write_done),
         .load_done_o(core_load_done), .error_o(core_error),
         .init_done_o(core_init), .reset_done_o(core_reset_done),
@@ -404,13 +484,17 @@ module beam_ctrl_top #(
         assign rx_rstn_o[line] = por_done_q ? (reset_rx ? target_reset_rstn[line] : core_rx_rstn[line]) : 1'b0;
         assign rx_t_o[line] = 1'b0;
         assign rx_r_o[line] = por_done_q && core_init && !reset_rx &&
-                              rx_gate[line] && channel_rx_enable[line] && pulse_rx_active;
+                              (rx_gate[line] || sync_external[0]) &&
+                              channel_rx_enable[line] && rx_window && !sync_tr_hold &&
+                              !(channel_busy && channel_enable_only);
         assign tx_clk_o[line] = por_done_q && core_tx_clk[line];
         assign tx_csb_o[line] = !por_done_q || reset_tx ? 1'b1 : core_tx_csb[line];
         assign tx_ldb_o[line] = !por_done_q || reset_tx ? 1'b1 : core_tx_ldb[line];
         assign tx_rstn_o[line] = por_done_q ? (reset_tx ? target_reset_rstn[line] : core_tx_rstn[line]) : 1'b0;
         assign tx_t_o[line] = por_done_q && core_init && !reset_tx &&
-                              tx_gate[line] && channel_tx_enable[line] && pulse_tx_active;
+                              (tx_gate[line] || sync_external[1]) &&
+                              channel_tx_enable[line] && tx_window && !sync_tr_hold &&
+                              !(channel_busy && channel_enable_only);
         assign tx_r_o[line] = 1'b0;
         for (chip=0;chip<4;chip=chip+1) begin : g_chip
             assign rx_sdi_o[line*4+chip] = por_done_q && !reset_rx ? core_rx_sdi[line*4+chip] : 1'b0;
