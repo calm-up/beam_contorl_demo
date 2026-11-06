@@ -60,6 +60,9 @@ module tb_sync_ap_batch;
 
     int rounds = 0, loads = 0;
     logic [23:0] captured [0:3];
+    // RX line 0, CID 0, RF0. Model the SPI staging register and LDAC latch.
+    logic [11:0] rx_staged_code = 0, rx_live_code = 0;
+    logic check_rx_overlap = 0, switch_ready = 0;
     time load_start;
     always @(negedge csb[0]) if (monitor_spi) begin
         for (int c=0; c<4; c++) captured[c] = 0;
@@ -68,6 +71,8 @@ module tb_sync_ap_batch;
             for (int c=0; c<4; c++)
                 captured[c] = {captured[c][22:0], sdi[c]};
         end
+        if (captured[0][23:12] == 12'h020)
+            rx_staged_code = captured[0][11:0];
         rounds++;
         if (rounds == 1) begin
             if (captured[0] !== 24'h021085 || captured[1] !== 24'hF80000 ||
@@ -82,11 +87,18 @@ module tb_sync_ap_batch;
     end
     always @(negedge ldb[0]) begin
         load_start = $time;
+        rx_live_code = rx_staged_code;
         loads++;
         #1;
-        if (ldb !== (loads == 1 ? 8'hFE : 8'h00)) $fatal(1, "Wrong load lines");
+        if (ldb !== (loads == 2 ? 8'h00 : 8'hFE)) $fatal(1, "Wrong load lines");
         @(posedge ldb[0]);
         if ($time-load_start != 600) $fatal(1, "LDAC width %0t", $time-load_start);
+    end
+
+    always @(negedge clk) if (check_rx_overlap) begin
+        if (rx_active !== 8'h01 || tx_active !== 0 || ldb !== 8'hFF ||
+            rx_live_code !== 12'h081)
+            $fatal(1, "Old RX window or live code changed during next-batch preparation");
     end
 
     task automatic open_window;
@@ -187,6 +199,39 @@ module tb_sync_ap_batch;
         if (tx_active != 0) $fatal(1, "TX opened inside the guard");
         #300;
         if (tx_active != 1 || rx_active != 0) $fatal(1, "External TX did not open");
+
+        // Continue RX with the full-batch code, then switch RF0 in a gap.
+        ext_t = 0;
+        #500;
+        ext_r = 1;
+        #500;
+        check_rx_overlap = 1;
+        array_sel = 0;
+        open_window();
+        send_frame(8'h45, 11, 88'h000000000000030A010000);
+        close_window();
+        get_reply(0,1);
+        switch_ready = 1;
+        #200;
+        if (rounds != 6 || loads != 2 || captured[0] !== 24'h0200CA ||
+            rx_staged_code !== 12'h0CA)
+            $fatal(1, "Next RX code was not staged while receiving");
+        // A READY batch still cannot load while R is high.
+        pulse_apply();
+        #200;
+        if (loads != 2) $fatal(1, "Apply accepted during RX");
+        check_rx_overlap = 0;
+        ext_r = 0;
+        #500;
+        if (rx_active != 0 || tx_active != 0) $fatal(1, "RX gap did not open");
+        pulse_apply();
+        #2500;
+        if (loads != 3 || rx_live_code !== 12'h0CA)
+            $fatal(1, "New RX code did not latch in the gap");
+        ext_r = 1;
+        #500;
+        if (rx_active != 1 || tx_active != 0 || rx_live_code !== 12'h0CA)
+            $fatal(1, "RX did not reopen with the new code");
         $display("TB_SYNC_AP_BATCH_PASS");
         $finish;
     end
