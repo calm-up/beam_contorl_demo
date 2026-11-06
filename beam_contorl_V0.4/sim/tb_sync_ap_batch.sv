@@ -41,20 +41,19 @@ module tb_sync_ap_batch;
     endtask
 
     task automatic get_reply(input logic [7:0] status, count,
-                             input logic [7:0] command = 8'h44,
-                             input logic [15:0] batch_id = 16'h1234);
-        logic [103:0] reply;
+                             input logic [7:0] command = 8'h45);
+        logic [87:0] reply;
         logic [7:0] sum;
         do @(negedge sclk); while (serial_out !== 1'b0);
         reply = 2'b10;
-        repeat (102) begin
+        repeat (86) begin
             @(negedge sclk);
-            reply = {reply[102:0], serial_out};
+            reply = {reply[86:0], serial_out};
         end
         sum = 0;
-        for (int k=2; k<=10; k++) sum += reply[(12-k)*8 +: 8];
-        if (reply !== {16'hAADD, 8'h01, 8'd13, 8'h7F, array_sel,
-                       command, status, batch_id, count, sum, 8'h55})
+        for (int k=2; k<=8; k++) sum += reply[(10-k)*8 +: 8];
+        if (reply !== {16'hAADD, 8'h01, 8'd11, 8'h7F, array_sel,
+                       command, status, count, sum, 8'h55})
             $fatal(1, "Unexpected response %026h", reply);
     endtask
 
@@ -90,10 +89,9 @@ module tb_sync_ap_batch;
         if ($time-load_start != 600) $fatal(1, "LDAC width %0t", $time-load_start);
     end
 
-    task automatic open_window(input logic [7:0] count);
+    task automatic open_window;
         wavefront = 1;
         #2000;
-        send_frame(8'h44, 3, {count, 16'h3412});
     endtask
     task automatic close_window;
         @(posedge sclk);
@@ -116,7 +114,7 @@ module tb_sync_ap_batch;
             #2000;
             send_frame(8'h47, 4, 32'h01000000);
             close_window();
-            get_reply(0,1,8'h47,0);
+            get_reply(0,1,8'h47);
             #200;
         end
         array_sel = 0;
@@ -124,14 +122,24 @@ module tb_sync_ap_batch;
             dut.sync_external != 2'b11 || loads != 0)
             $fatal(1, "Separate enable/mode config failed");
         monitor_spi = 1;
-        open_window(1);
+        open_window();
+        close_window();
+        get_reply(7,0);
+        #200;
+        open_window();
+        send_frame(8'h44, 3, 24'h013412);
+        close_window();
+        get_reply(3,0);
+        #200;
+
+        open_window();
         send_frame(8'h45, 11, 88'h0000000002050200000000, 1);
         close_window();
         get_reply(1,0);
         #200;
         if (rounds != 0 || loads != 0) $fatal(1, "Bad checksum executed");
 
-        open_window(2);
+        open_window();
         send_frame(8'h45, 11, 88'h0000000002050000020000);
         send_frame(8'h45, 11, 88'h0000000004070000020200);
         close_window();
@@ -146,7 +154,7 @@ module tb_sync_ap_batch;
         if (loads != 1 || !dut.sync_applied[0]) $fatal(1, "Expected one commit");
         #2000;
 
-        open_window(32);
+        open_window();
         for (int line=0; line<8; line++)
             for (int chip=0; chip<4; chip++)
                 send_frame(8'h45, 11, {64'h0201020102010201, 8'h0F, 8'(chip), 8'(line)});
@@ -159,7 +167,7 @@ module tb_sync_ap_batch;
         if (loads != 2) $fatal(1, "Full batch did not commit");
 
         array_sel = 1;
-        open_window(1);
+        open_window();
         send_frame(8'h45, 11, {64'h0000000000000201, 8'h01, 8'h00, 8'h00});
         close_window();
         get_reply(0,1);

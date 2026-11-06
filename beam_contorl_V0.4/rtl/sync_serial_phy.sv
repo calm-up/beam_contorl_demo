@@ -8,7 +8,7 @@ module sync_serial_phy (
     output logic byte_valid_o, seal_o, partial_o,
     output logic [7:0] byte_o,
     input wire response_start_i,
-    input wire [103:0] response_i,
+    input wire [87:0] response_i,
     output wire response_done_o
 );
     // Assert even when the external clock is stopped. Release at a
@@ -77,7 +77,7 @@ module sync_serial_phy (
     (* ASYNC_REG = "TRUE" *) logic [1:0] byte_sync_q, seal_sync_q, done_sync_q;
     logic byte_seen_q, seal_seen_q, done_seen_q;
     logic request_q;
-    logic [103:0] response_q;
+    logic [87:0] response_q;
     logic tx_done_q;
     assign response_done_o = done_seen_q != done_sync_q[1];
     always_ff @(posedge clk_i) begin
@@ -115,7 +115,7 @@ module sync_serial_phy (
     (* ASYNC_REG = "TRUE" *) logic [1:0] request_sync_q;
     logic tx_seen_q, tx_last_q;
     logic [6:0] tx_left_q;
-    logic [102:0] tx_shift_q;
+    logic [86:0] tx_shift_q;
     always_ff @(posedge sclk_i or posedge serial_reset) begin
         if (serial_reset) begin
             request_sync_q <= 0;
@@ -128,16 +128,16 @@ module sync_serial_phy (
             request_sync_q <= {request_sync_q[0], request_q};
             tx_last_q <= 0;
             if (tx_left_q != 0) begin
-                data_o <= tx_shift_q[102];
-                tx_shift_q <= {tx_shift_q[101:0], 1'b1};
+                data_o <= tx_shift_q[86];
+                tx_shift_q <= {tx_shift_q[85:0], 1'b1};
                 tx_left_q <= tx_left_q - 1'b1;
                 tx_last_q <= tx_left_q == 1;
             end else if (request_sync_q[1] != tx_seen_q) begin
                 tx_seen_q <= request_sync_q[1];
                 // Every response starts with AA, whose first bit is high.
                 data_o <= 1'b1;
-                tx_shift_q <= response_q[102:0];
-                tx_left_q <= 103;
+                tx_shift_q <= response_q[86:0];
+                tx_left_q <= 87;
             end else data_o <= 1;
         end
     end

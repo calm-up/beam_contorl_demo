@@ -20,7 +20,7 @@ module sync_ap_batch #(
     output logic [1:0] applied_o,
     output wire tr_hold_o, apply_rejected_o
 );
-    localparam logic [7:0] BEGIN_CMD = 8'h44, CHIP_CMD = 8'h45;
+    localparam logic [7:0] CHIP_CMD = 8'h45;
     localparam logic [7:0] OK = 0, FORMAT = 2, PARAMETER = 3, BUSY = 4,
                            SPI_ERROR = 6, COUNT_ERROR = 7, DUPLICATE = 8;
     typedef enum logic [3:0] {IDLE, RECEIVE, CHECK, ISSUE, WRITE_WAIT,
@@ -34,10 +34,9 @@ module sync_ap_batch #(
     wire byte_valid, seal, partial, reply_done;
     wire [7:0] rx_byte;
     logic [7:0] status_q;
-    logic [15:0] batch_id_q;
-    logic side_q, begin_seen_q;
+    logic side_q;
     logic enable_request_q;
-    logic [5:0] expected_q, received_q;
+    logic [5:0] received_q;
     logic [31:0] seen_q;
     logic [3:0] masks_q [0:31];
     logic [47:0] codes_q [0:31];
@@ -47,11 +46,11 @@ module sync_ap_batch #(
     logic [7:0] round_lines;
     wire [7:0] side_byte = {7'b0, side_q};
     wire [7:0] count_byte = {2'b0, received_q};
-    wire [7:0] reply_command = enable_request_q ? 8'h47 : BEGIN_CMD;
-    wire [7:0] reply_sum = 8'h01 + 8'd13 + 8'h7F + side_byte + reply_command +
-        status_q + batch_id_q[15:8] + batch_id_q[7:0] + count_byte;
-    wire [103:0] response = {16'hAADD, 8'h01, 8'd13, 8'h7F, side_byte,
-        reply_command, status_q, batch_id_q, count_byte, reply_sum, 8'h55};
+    wire [7:0] reply_command = enable_request_q ? 8'h47 : CHIP_CMD;
+    wire [7:0] reply_sum = 8'h01 + 8'd11 + 8'h7F + side_byte + reply_command +
+        status_q + count_byte;
+    wire [87:0] response = {16'hAADD, 8'h01, 8'd11, 8'h7F, side_byte,
+        reply_command, status_q, count_byte, reply_sum, 8'h55};
     sync_serial_phy u_phy (
         .clk_i(clk_i), .rst_i(rst_i), .sclk_i(sclk_i), .wave_i(wave_i),
         .data_i(data_i), .data_o(data_o), .byte_valid_o(byte_valid),
@@ -120,13 +119,10 @@ module sync_ap_batch #(
             apply_previous_q <= 0;
             state_q <= IDLE;
             status_q <= OK;
-            batch_id_q <= 0;
             side_q <= 0;
-            begin_seen_q <= 0;
             enable_request_q <= 0;
             enable_target_o <= 0;
             external_configured_o <= 0;
-            expected_q <= 0;
             received_q <= 0;
             seen_q <= 0;
             target_lines_q <= 0;
@@ -146,11 +142,8 @@ module sync_ap_batch #(
                 IDLE: if (wave_rise) begin
                     state_q <= RECEIVE;
                     status_q <= available_i ? OK : BUSY;
-                    batch_id_q <= 0;
                     side_q <= 0;
-                    begin_seen_q <= 0;
                     enable_request_q <= 0;
-                    expected_q <= 0;
                     received_q <= 0;
                     seen_q <= 0;
                     target_lines_q <= 0;
@@ -164,7 +157,7 @@ module sync_ap_batch #(
                             status_q <= FORMAT;
                         else if (frame_valid) begin
                             if (enable_request_q) status_q <= COUNT_ERROR;
-                            else if (!begin_seen_q && command == 8'h47) begin
+                            else if (received_q == 0 && command == 8'h47) begin
                                 enable_request_q <= 1;
                                 side_q <= side[0];
                                 if (side > 1 || length != 4 || line_byte > 7 ||
@@ -172,23 +165,15 @@ module sync_ap_batch #(
                                     status_q <= PARAMETER;
                                 else enable_target_o <= {line_byte[2:0], chip_byte[1:0],
                                                           mask_byte[1:0], payload[24]};
-                            end else if (!begin_seen_q) begin
-                                if (command != BEGIN_CMD || length != 3 || side > 1 ||
-                                    payload[23:16] == 0 || payload[23:16] > 32)
-                                    status_q <= PARAMETER;
-                                else begin
-                                    begin_seen_q <= 1;
-                                    side_q <= side[0];
-                                    batch_id_q <= {payload[7:0], payload[15:8]};
-                                    expected_q <= payload[21:16];
-                                end
-                            end else if (command != CHIP_CMD || side != side_byte ||
+                            end else if (command != CHIP_CMD || side > 1 ||
+                                         (received_q != 0 && side != side_byte) ||
                                          length != 11 || line_byte > 7 || chip_byte > 3 ||
                                          mask_byte == 0 || mask_byte > 15 || !codes_legal)
                                 status_q <= PARAMETER;
                             else if (seen_q[target]) status_q <= DUPLICATE;
-                            else if (received_q == expected_q) status_q <= COUNT_ERROR;
+                            else if (received_q == 6'd32) status_q <= COUNT_ERROR;
                             else begin
+                                side_q <= side[0];
                                 seen_q[target] <= 1;
                                 masks_q[target] <= mask_byte[3:0];
                                 codes_q[target] <= packed_codes;
@@ -208,7 +193,7 @@ module sync_ap_batch #(
                             state_q <= REPLY;
                         end else state_q <= ENABLE_ISSUE;
                     end
-                    else if (!begin_seen_q || received_q != expected_q) begin
+                    else if (received_q == 0) begin
                         status_q <= COUNT_ERROR;
                         state_q <= REPLY;
                     end else state_q <= ISSUE;
